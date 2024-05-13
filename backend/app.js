@@ -3,7 +3,7 @@ const app = express();
 require('dotenv').config()
 
 // test route
-app.get('/', (req,res) => {
+app.get('/test', (req,res) => {
     res.send('test');
 })
 
