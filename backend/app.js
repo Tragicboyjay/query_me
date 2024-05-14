@@ -6,7 +6,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const {
-    createUser
+    createUser,
+    authenticateUser
 } 
 = require("./Controllers/AuthController");
 
@@ -29,6 +30,8 @@ app.get('/test', (req,res) => {
 
 // Auth Routes
 app.post("/create-user", createUser);
+
+app.post("/authenticate", authenticateUser)
 
 // Db connection and app start
 mongoose.connect(process.env.CONNECTION_STRING)

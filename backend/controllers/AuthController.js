@@ -39,6 +39,39 @@ async function createUser(req,res) {
     };
 };
 
+const authenticateUser = async function (req,res) {
+    const { email, password } = req.body;
+
+    try {
+        const existingUser = await User.findOne({ email });
+
+        if (!existingUser) {
+            // userLogger.info('The email or password you\'ve entered is incorect');
+            return res.status(401).json({ message: 'The email or password you\'ve entered is incorect' });
+        }
+
+        const existingUserPassword = existingUser.password
+
+        const passwordMatch = await bcrypt.compare(password,existingUserPassword);
+
+        if (!passwordMatch) {
+            userLogger.info('The email or password you\'ve entered is incorect');
+            return res.status(401).json({ message: 'The email or password you\'ve entered is incorect' });
+        }
+
+        // const jwtTotken = jwt.sign({id: existingUser.userName}, process.env.JWT_SECRET_KEY);
+
+        res.status(200).json({ message: 'Login successful'});
+        // res.status(200).json({ message: 'Login successful', token: jwtTotken });
+        // userLogger.info('Login successful');
+    } catch (error) {
+        console.error('Error creating user:', error);
+        res.status(500).json({ message: 'Internal server error' });
+        // userLogger.error('Error creating user');
+    };
+};
+
 module.exports = {
-    createUser
+    createUser,
+    authenticateUser
 }; 
