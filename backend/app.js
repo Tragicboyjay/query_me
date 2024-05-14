@@ -5,17 +5,21 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-const {
-    createUser,
-    authenticateUser
-} 
-= require("./Controllers/AuthController");
+const authRoute = require('./Routes/authRoutes');
+const userRoute = require('./Routes/userRoutes');
+const questionRoute = require('./Routes/questionRoutes');
 
 app.use(cors());
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Router
+app.use("/auth", authRoute);
+app.use("/user", userRoute);
+app.use("/question", questionRoute);
+
 
 // log request middleware
 app.use((req,res,next) => {
@@ -28,10 +32,7 @@ app.get('/test', (req,res) => {
     res.send('test');
 });
 
-// Auth Routes
-app.post("/create-user", createUser);
 
-app.post("/authenticate", authenticateUser)
 
 // Db connection and app start
 mongoose.connect(process.env.CONNECTION_STRING)
