@@ -17,14 +17,6 @@ const protect = async function(req, res, next) {
                 return res.status(401).json({ message: "Not Authorized" });
             }
 
-            if (!req.params.id) {
-                return res.status(400).json({ message: 'Bad Request: User ID is required' });
-            }
-
-            if (req.params.id !== req.user._id.toString()) {
-                return res.status(403).json({ message: 'Forbidden: You are not authorized to perform this action' });
-            }
-
             next();
             
         } catch (error) {
