@@ -10,7 +10,7 @@ const askQuestion = async function (req,res) {
 
         if (!existingUser){
             questionLogger.error("Status code: 404, Message: 'Error asking question: User not found'");
-            res.status(404).json({ message: 'User not found. Question not saved.' });
+            return res.status(404).json({ message: 'User not found. Question not saved.' });
         }
         
         const { questionBody } = req.body;
@@ -52,7 +52,7 @@ const answerQuestion = async function (req,res) {
 
         if (question.answer) {
             questionLogger.error(`Status code: 400, Message: 'Error answering question: Question has already been answered. Question ID: ${questionId}'`);
-            res.status(400).json({ message: 'Question has already been answered' });
+            return res.status(400).json({ message: 'Question has already been answered' });
         };
 
         await Question.findByIdAndUpdate(questionId, { answer: questionAnswer })
@@ -70,14 +70,12 @@ const answerQuestion = async function (req,res) {
 const getQuestionsByUser = async function (req,res) {
     try {
         const existingUser = await User.findOne({ username: req.params.username }).populate('questionsRecieved').lean();
-        console.log(existingUser)
 
         if (!existingUser){
             questionLogger.error("Status code: 404, Message: 'Error getting questions: User not found'");
-            res.status(404).json({ message: 'User not found. Could not get questions.' });
+            return res.status(404).json({ message: 'User not found. Could not get questions.' });
         }
 
-        // const answeredQuestions = await Question.find({ recipient: existingUser.username, answer: { $ne: null } });
         const answeredQuestions = existingUser.questionsRecieved.filter(question => question.hasOwnProperty('answer'));
 
         questionLogger.info(`Status code: 200, Message: 'Questions fetched successfully', User: ${existingUser._id}`);
@@ -90,7 +88,29 @@ const getQuestionsByUser = async function (req,res) {
     }
 };
 
+const getOwnQuestions = async function (req, res) {
+    
+    try {
+        console.log(req.user);
+        const user = await User.findOne({ username: req.user.username }).populate(['questionsRecieved', 'questionsAsked']);
 
+        if (!user) {
+            questionLogger.error("Status code: 404, Message: 'Error getting own questions: User not found'");
+            return res.status(404).json({ message: 'User not found. Could not own get questions.' });
+        }
+
+        const questionsRecieved = user.questionsRecieved; // 
+        const questionsAsked = user.questionsAsked;
+
+        questionLogger.info(`Status code: 200, Message: 'Own questions fetched successfully', User: ${user._id}`);
+        res.status(200).json({ message: "Own questions fetched successfully", questionsRecieved, questionsAsked });
+        
+    } catch (error) {
+        console.error('Error fetching questions:', error);
+        questionLogger.error("Status code: 500, Message: 'Error fetching own questions: Internal server error'");
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
 
 
 module.exports = {

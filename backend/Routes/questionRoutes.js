@@ -7,7 +7,8 @@ const router = express.Router();
 router.post("/ask/:username", protect, askQuestion);
 router.post("/answer/:questionId", protect, answerQuestion);
 
-router.get("/:username", getQuestionsByUser);
+router.get("/user/:username", getQuestionsByUser);
 router.get("/own", protect, getOwnQuestions);
+
 
 module.exports = router;
