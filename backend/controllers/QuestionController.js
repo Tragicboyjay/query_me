@@ -89,9 +89,7 @@ const getQuestionsByUser = async function (req,res) {
 };
 
 const getOwnQuestions = async function (req, res) {
-    
     try {
-        console.log(req.user);
         const user = await User.findOne({ username: req.user.username }).populate(['questionsRecieved', 'questionsAsked']);
 
         if (!user) {
