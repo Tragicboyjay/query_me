@@ -69,16 +69,18 @@ const answerQuestion = async function (req,res) {
 
 const getQuestionsByUser = async function (req,res) {
     try {
-        const existingUser = await User.findOne({username: req.params.username});
+        const existingUser = await User.findOne({ username: req.params.username }).populate('questionsRecieved').lean();
+        console.log(existingUser)
 
         if (!existingUser){
             questionLogger.error("Status code: 404, Message: 'Error getting questions: User not found'");
-            res.status(404).json({ message: 'User not found. Could get questions.' });
+            res.status(404).json({ message: 'User not found. Could not get questions.' });
         }
 
-        const answeredQuestions = await Question.find({ recipient: existingUser.username, answer: { $ne: null } });
+        // const answeredQuestions = await Question.find({ recipient: existingUser.username, answer: { $ne: null } });
+        const answeredQuestions = existingUser.questionsRecieved.filter(question => question.hasOwnProperty('answer'));
 
-        questionLogger.info("Status code: 200, Message: 'Questions fetched successfully'");
+        questionLogger.info(`Status code: 200, Message: 'Questions fetched successfully', User: ${existingUser._id}`);
         res.status(200).json({ message: "Questions fetched successfully", questions: answeredQuestions });
 
     } catch (error) {
@@ -89,8 +91,11 @@ const getQuestionsByUser = async function (req,res) {
 };
 
 
+
+
 module.exports = {
     askQuestion,
     answerQuestion,
-    getQuestionsByUser
+    getQuestionsByUser,
+    getOwnQuestions
 };

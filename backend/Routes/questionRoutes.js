@@ -1,5 +1,5 @@
 const express = require('express');
-const { askQuestion, answerQuestion, getQuestionsByUser } = require('../Controllers/QuestionController');
+const { askQuestion, answerQuestion, getQuestionsByUser, getOwnQuestions } = require('../Controllers/QuestionController');
 const { protect }  = require("../Middleware/authMiddleware");
 const router = express.Router();
 
@@ -8,5 +8,6 @@ router.post("/ask/:username", protect, askQuestion);
 router.post("/answer/:questionId", protect, answerQuestion);
 
 router.get("/:username", getQuestionsByUser);
+router.get("/own", protect, getOwnQuestions);
 
 module.exports = router;
