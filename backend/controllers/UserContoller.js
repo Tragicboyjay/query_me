@@ -14,14 +14,17 @@ const deleteUser = async function(req,res) {
         const correctPassword = await bcrypt.compare(currentPassword, user.password)
     
         if (!correctPassword) {
+            authLogger.info("Status code: 401, Message: 'User deletion unsuccessful: Current password is incorrect.'");
             return res.status(401).json({ message: 'Current password is incorrect. Please try again.' });
         }
         
         await User.findByIdAndDelete(userId);
+
+        authLogger.info("Status code: 200, Message: 'User deleted successfully'");
         res.status(200).json({ message: 'User deleted successfully' });
     } catch (error) {
         console.error('Error deleting user:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        authLogger.error("Status code: 500, Message: 'Error deleting user: Internal server error'");
     }     
 };
 
@@ -36,6 +39,7 @@ const editUser = async function (req,res) {
         const correctPassword = await bcrypt.compare(currentPassword, user.password)
     
         if (!correctPassword) {
+            authLogger.info(`Status code: 401, Message: 'Error editing user: Current password is incorrect. Please try again.'`);
             return res.status(401).json({ message: 'Current password is incorrect. Please try again.' });
         }
     
@@ -50,6 +54,7 @@ const editUser = async function (req,res) {
                     const currentEmail = user.email
 
                     if (newValue === currentEmail) {
+                        authLogger.info("Status code: 200, Message: 'No changes made: Value is the same as current email'");
                         return res.status(200).json({ message: 'Value is the same as current email, no changes made' });
                     }
 
@@ -60,6 +65,7 @@ const editUser = async function (req,res) {
                 const currentUserName = user.username;
                     
                 if (newValue === currentUserName) {
+                    authLogger.info("Status code: 200, Message: 'No changes made: Value is the same as current username'");
                     return res.status(200).json({ message: 'Value is the same as current user name, no changes made' });
                 }
 
@@ -68,6 +74,7 @@ const editUser = async function (req,res) {
             
             case 'password':
                 if (newValue === currentPassword) {
+                    authLogger.info("Status code: 200, Message: 'No changes made: Value is the same as current password'");
                     return res.status(200).json({ message: 'Value is the same as current password, no changes made' });
                 }
 
@@ -77,14 +84,17 @@ const editUser = async function (req,res) {
 
                 break;
             default:
+                authLogger.error("Status code: 400, Message: 'Error editing user: Invalid action provided'");
                 res.status(400).json({ message: 'Invalid action provided' });
 
         }
 
         await User.updateOne({ _id: userId }, { $set: editObject });
+        authLogger.info(`Status code: 200, Message: '${editField} updated successfully'`);
         res.status(200).json({ message: `${editField} updated successfully` });
     } catch (error) {
         console.error(`Error updating ${editField} :`, error);
+        authLogger.error(`Status code: 500, Message: 'Error editing user ${editField}: Internal server error'`);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
