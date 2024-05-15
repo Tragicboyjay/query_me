@@ -6,7 +6,7 @@ const askQuestion = async function (req,res) {
     try {
         const author = req.user;
         
-        const existingUser = await User.findOne({username: req.params.username})
+        const existingUser = await User.findOne({username: req.params.username});
 
         if (!existingUser){
             questionLogger.error("Status code: 404, Message: 'Error asking question: User not found'");
@@ -59,7 +59,7 @@ const answerQuestion = async function (req,res) {
 
         questionLogger.info(`Status code: 200, Message: 'Question answered successfully. Question ID: ${questionId}'`);
         res.status(200).json({ message: 'Question answered successfully'});
-        
+
     } catch (error) {
         console.error('Error asking question:', error);
         questionLogger.error("Status code: 500, Message: 'Error answering question: Internal server error'");
@@ -67,8 +67,30 @@ const answerQuestion = async function (req,res) {
     }
 };
 
+const getQuestionsByUser = async function (req,res) {
+    try {
+        const existingUser = await User.findOne({username: req.params.username});
+
+        if (!existingUser){
+            questionLogger.error("Status code: 404, Message: 'Error getting questions: User not found'");
+            res.status(404).json({ message: 'User not found. Could get questions.' });
+        }
+
+        const answeredQuestions = await Question.find({ recipient: existingUser.username, answer: { $ne: null } });
+
+        questionLogger.info("Status code: 200, Message: 'Questions fetched successfully'");
+        res.status(200).json({ message: "Questions fetched successfully", questions: answeredQuestions });
+
+    } catch (error) {
+        console.error('Error fetching questions:', error);
+        questionLogger.error("Status code: 500, Message: 'Error fetching questions: Internal server error'");
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 
 module.exports = {
     askQuestion,
-    answerQuestion
+    answerQuestion,
+    getQuestionsByUser
 };
