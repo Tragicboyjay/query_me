@@ -1,12 +1,56 @@
 import { FormControl, Heading, FormLabel, Input, Center, Button, Text, Link as ChakraLink, Box } from "@chakra-ui/react";
-import { Link as ReactRouterLink } from 'react-router-dom'
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'
 import { useState } from "react";
 
 const SignIn = () => {
     const [emailInput, setEmailInput] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
-    const handleSignIn = () => {
+    const navigate = useNavigate();
+
+    const handleSignIn = async e => {
+        e.preventDefault(); 
+
+        try {
+            if (!emailInput || !passwordInput) {
+                throw new Error("All fields must be filled in.");
+            }
+    
+            const credentials = {
+                email: emailInput,
+                password: passwordInput
+            }
+            
+            
+    
+            const response = await fetch("http://localhost:8001/auth/authenticate", {
+                method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(credentials)
+            });
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message);
+            }
+
+            const data = await response.json();
+            
+            if (!data.user) {
+                setErrorMessage(data.message);
+                return;
+            }
+
+            sessionStorage.setItem('user', JSON.stringify(data.user));
+
+            navigate("/")
+            
+        } catch (error) {
+            setErrorMessage(error.message);
+        }
         
     };
     
@@ -14,6 +58,7 @@ const SignIn = () => {
         <Box my="25%">
             
             <Heading textAlign={"center"} mb="1rem">Sign In</Heading>
+            <Text textAlign="center" color="red">{errorMessage}</Text>
           
             
             <FormControl isRequired>
@@ -27,7 +72,7 @@ const SignIn = () => {
             </FormControl>
 
             <Center>
-                <Button mb={"1rem"} onClick={handleSignIn}>Sign In</Button>
+                <Button background="teal.200" mb={"1rem"} onClick={handleSignIn}>Sign In</Button>
             </Center>
 
             
