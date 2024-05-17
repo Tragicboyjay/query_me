@@ -1,16 +1,9 @@
 import {
     Box,
     Flex,
-    Avatar,
     HStack,
     Link,
     IconButton,
-    Button,
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
-    MenuDivider,
     useDisclosure,
     useColorModeValue,
     Stack,
@@ -19,16 +12,8 @@ import {
   import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
   import PropTypes from 'prop-types'; // Import PropTypes
   import { Link as ReactRouterLink } from 'react-router-dom'; // Import Link from React Router
+  import { useAuth } from '../contexts/authContext';
 
-  const user = {
-    username: "TragicBoyJay"
-  }
-
-    // const user = null;
-
-    let Links;
-
-    { user ? Links = [{ name: 'Home', to: '/' }, { name: 'My profile', to: '/user-profile' }] : Links = [{ name: 'Home', to: '/' }, { name: 'Sign in', to: '/sign-in' }]}
 
   const NavLink = ({ children, to }) => (
     <Link
@@ -54,6 +39,11 @@ import {
   
   export default function Simple() {
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const { user } = useAuth();
+    let Links;
+
+    { user ? Links = [{ name: 'Home', to: '/' }, { name: 'My profile', to: '/user-profile' }] : Links = [{ name: 'Home', to: '/' }, { name: 'Sign in', to: '/sign-in' }]}
   
     return (
       <>

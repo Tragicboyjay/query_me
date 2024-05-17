@@ -1,6 +1,7 @@
-import { FormControl, Heading, FormLabel, Input, Center, Button, Text, Link as ChakraLink, Box } from "@chakra-ui/react";
+import { FormControl, Heading, FormLabel, Input, Center, Button, Text, Link as ChakraLink, Box, Container } from "@chakra-ui/react";
 import { Link as ReactRouterLink, useNavigate} from 'react-router-dom';
 import { useState } from "react";
+import { useAuth } from "../../contexts/authContext";
 
 const SignUp = () => {
     const [emailInput, setEmailInput] = useState("");
@@ -8,6 +9,7 @@ const SignUp = () => {
     const [passwordInput, setPasswordInput] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
+    const { loginUser } = useAuth();
     const navigate = useNavigate();
 
     const handleSignUp = async (e) => {
@@ -43,9 +45,8 @@ const SignUp = () => {
                 setErrorMessage(data.message);
                 return;
             }
-
-            sessionStorage.setItem('user', JSON.stringify(data.user));
-
+           
+            loginUser(data.user);
             navigate("/")
 
         } catch (error) {
@@ -53,37 +54,40 @@ const SignUp = () => {
         }
     };
 
-    return ( 
-        <Box my="25%">
-            <form onSubmit={handleSignUp}>
-                <Heading textAlign="center" mb="1rem">Sign Up</Heading>
-                <Text textAlign="center" color="red">{errorMessage}</Text>
+    return (
+        <Container>
+            <Box my="25%">
+                <form onSubmit={handleSignUp}>
+                    <Heading textAlign="center" mb="1rem">Sign Up</Heading>
+                    <Text textAlign="center" color="red">{errorMessage}</Text>
 
-                <FormControl isRequired>
-                    <FormLabel>Email</FormLabel>
-                    <Input type='email' mb="1rem" value={emailInput} placeholder='Email' onChange={e => setEmailInput(e.target.value)}/>
-                </FormControl>
+                    <FormControl isRequired>
+                        <FormLabel>Email</FormLabel>
+                        <Input type='email' mb="1rem" value={emailInput} placeholder='Email' onChange={e => setEmailInput(e.target.value)}/>
+                    </FormControl>
 
-                <FormControl isRequired>
-                    <FormLabel>Username</FormLabel>
-                    <Input type='text' mb="1rem" value={usernameInput} placeholder='Username' onChange={e => setUsernameInput(e.target.value)}/>
-                </FormControl>
+                    <FormControl isRequired>
+                        <FormLabel>Username</FormLabel>
+                        <Input type='text' mb="1rem" value={usernameInput} placeholder='Username' onChange={e => setUsernameInput(e.target.value)}/>
+                    </FormControl>
 
-                <FormControl isRequired>
-                    <FormLabel>Password</FormLabel>
-                    <Input type="password" mb="1rem" placeholder='Password' value={passwordInput} onChange={e => setPasswordInput(e.target.value)}/>
-                </FormControl>
+                    <FormControl isRequired>
+                        <FormLabel>Password</FormLabel>
+                        <Input type="password" mb="1rem" placeholder='Password' value={passwordInput} onChange={e => setPasswordInput(e.target.value)}/>
+                    </FormControl>
 
-                <Center>
-                    <Button background={"teal.200"} type="submit" mb="1rem">Sign Up</Button>
-                </Center>
+                    <Center>
+                        <Button background={"teal.200"} type="submit" mb="1rem">Sign Up</Button>
+                    </Center>
 
-                <Text textAlign="center">
-                    Already have an account?{' '}
-                    <ChakraLink as={ReactRouterLink} to="/sign-in">Sign in!</ChakraLink>
-                </Text>
-            </form>
-        </Box>
+                    <Text textAlign="center">
+                        Already have an account?{' '}
+                        <ChakraLink as={ReactRouterLink} to="/sign-in">Sign in!</ChakraLink>
+                    </Text>
+                </form>
+            </Box>
+        </Container>
+
     );
 };
 
