@@ -7,6 +7,8 @@ import SignUp from "./pages/Auth/SignUp";
 import SingleQuestion from "./pages/Question/SingleQuestion";
 import UserQuestions from "./pages/Question/UserQuestions";
 import UserProfile from "./pages/User/UserProfile";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 
 function App() {
   return (
@@ -19,7 +21,10 @@ function App() {
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/single-question" element={<SingleQuestion />} />
             <Route path="/user-questions" element={<UserQuestions />} />
-            <Route path="/user-profile" element={<UserProfile />} />
+            
+            <Route element={<ProtectedRoute />}>
+              <Route path="/user-profile" element={<UserProfile />} />
+            </Route>
           </Routes>
       </>
       <Footer />
