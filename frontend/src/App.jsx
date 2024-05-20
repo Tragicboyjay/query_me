@@ -20,7 +20,7 @@ function App() {
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/single-question" element={<SingleQuestion />} />
-            <Route path="/user-questions" element={<UserQuestions />} />
+            <Route path="/user/:username" element={<UserQuestions />} />
             
             <Route element={<ProtectedRoute />}>
               <Route path="/user-profile" element={<UserProfile />} />

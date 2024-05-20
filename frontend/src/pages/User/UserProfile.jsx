@@ -129,7 +129,7 @@ const UserProfile = () => {
     }
 
     return (
-        <Box w={"100%"} px={"15%"} mt={"2rem"}>
+        <Box w={"100%"} px={"15%"} my={"1rem"}>
             <Flex  
                 direction={["column", "row", "row", "row"]} 
                 width={"100%"}
@@ -155,7 +155,10 @@ const UserProfile = () => {
                 <option value="answered">Answered Questions</option>
             </Select>
 
-            <Box>
+            <Box
+                overflowY="auto" // This will enable vertical scrolling
+                maxHeight="350px" // Adjust this height as needed    
+            >
                 {errorMessage && <Heading textAlign={"center"}>{errorMessage}</Heading>}
                 {!errorMessage && data && data.map(question => (
                     <Box 

@@ -47,7 +47,7 @@ import {
   
     return (
       <>
-        <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
+        <Box bg={useColorModeValue('gray.100', 'gray.900')} px="3rem">
           <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
             <IconButton
               size={'md'}
@@ -68,7 +68,7 @@ import {
               </HStack>
             </HStack>
             <Flex alignItems={'center'}>
-                {user && <Text>Hello, {user.username}</Text>}
+                {user && <Text><i className="fa-solid fa-user"></i> {user.username}</Text>}
               
             </Flex>
           </Flex>
