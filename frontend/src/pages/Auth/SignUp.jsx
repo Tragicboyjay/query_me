@@ -1,4 +1,4 @@
-import { FormControl, Heading, FormLabel, Input, Center, Button, Text, Link as ChakraLink, Box, Container } from "@chakra-ui/react";
+import { FormControl, Heading, FormLabel, Input, Center, Button, Text, Link as ChakraLink, Box } from "@chakra-ui/react";
 import { Link as ReactRouterLink, useNavigate} from 'react-router-dom';
 import { useState } from "react";
 import { useAuth } from "../../contexts/authContext";
@@ -12,7 +12,7 @@ const SignUp = () => {
     const { loginUser } = useAuth();
     const navigate = useNavigate();
 
-    const handleSignUp = async (e) => {
+    const handleSignUp = async e => {
         e.preventDefault(); 
 
         if (!emailInput || !usernameInput || !passwordInput) {
@@ -47,7 +47,7 @@ const SignUp = () => {
             }
            
             loginUser(data.user);
-            navigate("/")
+            navigate("/user-profile")
 
         } catch (error) {
             setErrorMessage(error.message);
@@ -55,8 +55,11 @@ const SignUp = () => {
     };
 
     return (
-        <Container>
-            <Box my="25%">
+        
+            <Box
+                width="70%"
+                maxWidth="400px"
+            >
                 <form onSubmit={handleSignUp}>
                     <Heading textAlign="center" mb="1rem">Sign Up</Heading>
                     <Text textAlign="center" color="red">{errorMessage}</Text>
@@ -86,8 +89,7 @@ const SignUp = () => {
                     </Text>
                 </form>
             </Box>
-        </Container>
-
+        
     );
 };
 

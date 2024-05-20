@@ -14,7 +14,7 @@ import {
     ModalBody,
     ModalCloseButton,
     Textarea
- } from "@chakra-ui/react";
+} from "@chakra-ui/react";
 import { useAuth } from '../../contexts/authContext';
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState} from "react";
@@ -32,7 +32,7 @@ const UserProfile = () => {
 
     const handleLogOut = () => {
         logoutUser();
-        navigate('/sign-in', { replace: true})
+        navigate('/sign-in', { replace: true })
     }
 
     const formatDate = date => {
@@ -156,8 +156,7 @@ const UserProfile = () => {
             </Select>
 
             <Box
-                overflowY="auto" // This will enable vertical scrolling
-                maxHeight="350px" // Adjust this height as needed    
+                minHeight="350px" // Ensures it stays at the top even when empty
             >
                 {errorMessage && <Heading textAlign={"center"}>{errorMessage}</Heading>}
                 {!errorMessage && data && data.map(question => (

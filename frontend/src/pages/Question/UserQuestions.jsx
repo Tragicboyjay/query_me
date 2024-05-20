@@ -86,6 +86,8 @@ const UserQuestions = () => {
                 throw new Error(data.message);
             }
 
+            setQuestionInput("")
+
             onClose()
         } catch (error) {
             setErrorMessage(error.message)
@@ -120,9 +122,8 @@ const UserQuestions = () => {
                 >Ask Question</Button>
             </Center>
 
-            <Box
-            overflowY="auto" // This will enable vertical scrolling
-            maxHeight="350px" // Adjust this height as needed                     
+            <Box  
+                minHeight="350px" // Ensures it stays at the top even when empty                  
             >
                 {errorMessage && <Heading textAlign={"center"}>{errorMessage}</Heading>}
                 {!errorMessage && userQuestions && userQuestions.map( question => (
