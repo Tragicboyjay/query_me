@@ -8,6 +8,7 @@ import SingleQuestion from "./pages/Question/SingleQuestion";
 import UserQuestions from "./pages/Question/UserQuestions";
 import UserProfile from "./pages/User/UserProfile";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Error from "./pages/Error";
 
 
 function App() {
@@ -21,10 +22,10 @@ function App() {
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/single-question" element={<SingleQuestion />} />
             <Route path="/user/:username" element={<UserQuestions />} />
-            
             <Route element={<ProtectedRoute />}>
               <Route path="/user-profile" element={<UserProfile />} />
             </Route>
+            <Route path="*" element={<Error />} />
           </Routes>
       </>
       <Footer />
