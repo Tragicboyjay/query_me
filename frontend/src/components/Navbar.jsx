@@ -57,7 +57,7 @@ import {
               onClick={isOpen ? onClose : onOpen}
             />
             <HStack spacing={8} alignItems={'center'}>
-              <Box><Text fontSize='3xl'>Query-Me</Text></Box>
+              <Box><Text fontSize='3xl'><ReactRouterLink to="/">Query-Me</ReactRouterLink></Text></Box>
               <HStack
                 as={'nav'}
                 spacing={4}
