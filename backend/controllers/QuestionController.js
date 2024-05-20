@@ -94,10 +94,10 @@ const getOwnQuestions = async function (req, res) {
 
         if (!user) {
             questionLogger.error("Status code: 404, Message: 'Error getting own questions: User not found'");
-            return res.status(404).json({ message: 'User not found. Could not own get questions.' });
+            return res.status(404).json({ message: 'User not found. Could not get own questions.' });
         }
 
-        const questionsRecieved = user.questionsRecieved; // 
+        const questionsRecieved = user.questionsRecieved; 
         const questionsAsked = user.questionsAsked;
 
         questionLogger.info(`Status code: 200, Message: 'Own questions fetched successfully', User: ${user._id}`);
