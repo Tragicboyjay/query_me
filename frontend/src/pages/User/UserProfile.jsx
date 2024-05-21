@@ -16,8 +16,9 @@ import {
     Textarea
 } from "@chakra-ui/react";
 import { useAuth } from '../../contexts/authContext';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useEffect, useState} from "react";
+
 
 const UserProfile = () => {
     const [selectValue, setSelectValue] = useState("asked");
@@ -140,7 +141,7 @@ const UserProfile = () => {
              >
                 <Heading 
                     mb={["", "", "", ""]}
-                >{user.username} <i style={{cursor: "pointer"}} className="fa-solid fa-gear"></i></Heading>
+                >{user.username} <Link to="/user-profile/settings"><i style={{cursor: "pointer"}, {color: "lightgrey"}} className="fa-solid fa-gear"></i></Link></Heading>
                 <Spacer />
                 <Button onClick={handleLogOut} background={"red.400"}>Log out</Button>
             </Flex>

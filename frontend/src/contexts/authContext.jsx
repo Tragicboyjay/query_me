@@ -22,8 +22,20 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const updateUsername = (newUsername) => {
+    const updatedUser = { ...user, username: newUsername };
+    sessionStorage.setItem('user', JSON.stringify(updatedUser));
+    setUser(updatedUser);
+};
+
+const updateEmail = (newEmail) => {
+    const updatedUser = { ...user, email: newEmail };
+    sessionStorage.setItem('user', JSON.stringify(updatedUser));
+    setUser(updatedUser);
+};
+
   return (
-    <AuthContext.Provider value={{ user, loginUser, logoutUser }}>
+    <AuthContext.Provider value={{ user, loginUser, logoutUser, updateEmail, updateUsername }}>
       {children}
     </AuthContext.Provider>
   );

@@ -7,6 +7,7 @@ import SignUp from "./pages/Auth/SignUp";
 import SingleQuestion from "./pages/Question/SingleQuestion";
 import UserQuestions from "./pages/Question/UserQuestions";
 import UserProfile from "./pages/User/UserProfile";
+import UserSettings from "./pages/User/UserSettings";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Error from "./pages/Error";
 import { Flex,Box } from "@chakra-ui/react";
@@ -30,6 +31,7 @@ function App() {
           <Route path="/user/:username" element={<UserQuestions />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/user-profile" element={<UserProfile />} />
+            <Route path="/user-profile/settings" element={<UserSettings />} />
           </Route>
           <Route path="*" element={<Error />} />
         </Routes>
