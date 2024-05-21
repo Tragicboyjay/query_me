@@ -21,7 +21,7 @@ import { useEffect, useState} from "react";
 
 
 const UserProfile = () => {
-    const [selectValue, setSelectValue] = useState("asked");
+    const [selectValue, setSelectValue] = useState("new");
     const [errorMessage, setErrorMessage] = useState("");
     const [data, setData] = useState(null);
     const [questionAnswer, setQuestionAnswer] = useState("");
@@ -141,7 +141,7 @@ const UserProfile = () => {
              >
                 <Heading 
                     mb={["", "", "", ""]}
-                >{user.username} <Link to="/user-profile/settings"><i style={{cursor: "pointer"}, {color: "lightgrey"}} className="fa-solid fa-gear"></i></Link></Heading>
+                >{user.username} <Link to="/user-profile/settings"><i style={{cursor: "pointer", color: "lightgrey"}} className="fa-solid fa-gear"></i></Link></Heading>
                 <Spacer />
                 <Button onClick={handleLogOut} background={"red.400"}>Log out</Button>
             </Flex>
@@ -151,8 +151,8 @@ const UserProfile = () => {
                 value={selectValue}
                 onChange={e => setSelectValue(e.target.value)}
             >
-                <option value="asked">Asked Questions</option>
                 <option value="new">New Questions</option>
+                <option value="asked">Asked Questions</option>
                 <option value="answered">Answered Questions</option>
             </Select>
 

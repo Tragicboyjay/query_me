@@ -1,4 +1,4 @@
-import { FormControl, Heading, FormLabel, Input, Center, Button, Text, Link as ChakraLink, Box } from "@chakra-ui/react";
+import { FormControl, Heading, FormLabel, Input, Center, Button, Text, Link as ChakraLink, Box, useToast } from "@chakra-ui/react";
 import { Link as ReactRouterLink, useNavigate} from 'react-router-dom';
 import { useState } from "react";
 import { useAuth } from "../../contexts/authContext";
@@ -11,21 +11,38 @@ const SignUp = () => {
 
     const { loginUser } = useAuth();
     const navigate = useNavigate();
+    const toast = useToast();
 
     const handleSignUp = async e => {
         e.preventDefault(); 
-
-        if (!emailInput || !usernameInput || !passwordInput) {
-            throw new Error("All fields must be filled in.");
-        }
-
-        const newUser = {
-            email: emailInput,
-            username: usernameInput,
-            password: passwordInput
-        };
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const usernameRegex = /^[a-zA-Z0-9]{1,12}$/;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
         try {
+            if (!emailInput || !usernameInput || !passwordInput) {
+                throw new Error("All fields must be filled in.");
+            }
+
+            if (!emailRegex.test(emailInput)) {
+                throw new Error("Please enter a valid email address.");
+            }
+
+            if (!usernameRegex.test(usernameInput)) {
+                throw new Error("Username must be 1-12 characters long and can only contain letters and numbers.");
+            }
+
+            if (!passwordRegex.test(passwordInput)) {
+                throw new Error("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+            }
+
+            const newUser = {
+                email: emailInput,
+                username: usernameInput,
+                password: passwordInput
+            };
+
+        
             const response = await fetch("http://localhost:8001/auth/create-user", {
                 method: 'POST',
                 headers: {
@@ -45,6 +62,14 @@ const SignUp = () => {
                 setErrorMessage(data.message);
                 return;
             }
+
+            toast({
+                title: 'Account created.',
+                description: data.message,
+                status: 'success',
+                duration: 9000,
+                isClosable: true,
+            })
            
             loginUser(data.user);
             navigate("/user-profile")
