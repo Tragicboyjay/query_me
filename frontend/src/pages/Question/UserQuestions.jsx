@@ -14,10 +14,9 @@ import {
     useDisclosure,
     Textarea
  } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/authContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const UserQuestions = () => {
     const { user } = useAuth();
@@ -50,6 +49,10 @@ const UserQuestions = () => {
 
             if (!response.ok) {
                 const data = await response.json();
+                if ( response.status === 404 ) {
+                    navigate(`/user-not-found/${username}`);
+                    return;
+                }
                 throw new Error(data.message);
             }
 

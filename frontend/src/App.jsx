@@ -8,7 +8,8 @@ import UserQuestions from "./pages/Question/UserQuestions";
 import UserProfile from "./pages/User/UserProfile";
 import UserSettings from "./pages/User/UserSettings";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Error from "./pages/Error";
+import PageNotFound from "./pages/PageNotFound";
+import UserNotFound from "./pages/UserNotFound"
 import { Flex,Box } from "@chakra-ui/react";
 
 function App() {
@@ -31,7 +32,8 @@ function App() {
             <Route path="/user-profile" element={<UserProfile />} />
             <Route path="/user-profile/settings" element={<UserSettings />} />
           </Route>
-          <Route path="*" element={<Error />} />
+          <Route path="/user-not-found/:username" element={<UserNotFound />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Box>
       <Footer />
