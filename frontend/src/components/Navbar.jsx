@@ -7,11 +7,12 @@ import {
     useDisclosure,
     useColorModeValue,
     Stack,
-    Text
+    Text,
+    Heading
   } from '@chakra-ui/react';
   import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
   import PropTypes from 'prop-types'; // Import PropTypes
-  import { Link as ReactRouterLink } from 'react-router-dom'; // Import Link from React Router
+  import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'; // Import Link from React Router
   import { useAuth } from '../contexts/authContext';
 
 
@@ -44,6 +45,8 @@ import {
     let Links;
 
     { user ? Links = [{ name: 'Home', to: '/' }, { name: 'My profile', to: '/user-profile' }] : Links = [{ name: 'Home', to: '/' }, { name: 'Sign in', to: '/sign-in' }]}
+
+    const navigate = useNavigate();
   
     return (
       <>
@@ -57,7 +60,7 @@ import {
               onClick={isOpen ? onClose : onOpen}
             />
             <HStack spacing={8} alignItems={'center'}>
-              <Box><Text fontSize='3xl'><ReactRouterLink to="/">Query-Me</ReactRouterLink></Text></Box>
+              <Box><Heading fontSize='3xl'><ReactRouterLink to="/">Query-Me</ReactRouterLink></Heading></Box>
               <HStack
                 as={'nav'}
                 spacing={4}
@@ -68,7 +71,11 @@ import {
               </HStack>
             </HStack>
             <Flex alignItems={'center'}>
-                {user && <Text><i className="fa-solid fa-user"></i> {user.username}</Text>}
+                {user && <Text
+                  onClick={() => navigate("/user-profile")}
+                  display={["none", "block"]}
+                  cursor="pointer"
+                ><i className="fa-solid fa-user"></i> {user.username}</Text>}
               
             </Flex>
           </Flex>

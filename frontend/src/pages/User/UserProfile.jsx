@@ -140,7 +140,8 @@ const UserProfile = () => {
                 align="center"
              >
                 <Heading 
-                    mb={["", "", "", ""]}
+                    mb={["1rem", "", "", ""]}
+                    textAlign="center"
                 >{user.username} <Link to="/user-profile/settings"><i style={{cursor: "pointer", color: "lightgrey"}} className="fa-solid fa-gear"></i></Link></Heading>
                 <Spacer />
                 <Button onClick={handleLogOut} background={"red.400"}>Log out</Button>

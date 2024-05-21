@@ -87,8 +87,27 @@ const UserSettings = () => {
     const editUser = async e => {
         try {
             e.preventDefault();
-
             setEditError("");
+
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const usernameRegex = /^[a-zA-Z0-9]{1,12}$/;
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+            if ( editField === "Email" && !emailRegex.test(newEditInput) ) {
+                throw new Error("Please enter a valid email address.");
+            }
+
+            
+            if ( editField === "Username" && !usernameRegex.test(newEditInput)) {
+                throw new Error("Username must be 1-12 characters long and can only contain letters and numbers.");
+            }
+
+
+            if ( editField === "Password" && !passwordRegex.test(newEditInput)) {
+                throw new Error("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+            }
+
+    
             const body = { password: editPasswordInput, newValue: newEditInput };
 
             const response = await fetch(`http://localhost:8001/user/${editField.toLowerCase()}`, {
