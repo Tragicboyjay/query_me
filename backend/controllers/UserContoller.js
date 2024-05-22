@@ -175,11 +175,33 @@ const unfollowUser = async function (req, res) {
     }
 }
 
+const getFollowerCount = async function (req, res) {
+    try {
+        const username = req.params.username;
+        const existingUser = await User.findOne({ username: username });
+    
+        if (!existingUser)  {
+            userLogger.info(`Status code: 404, Message: 'Error fetching user count: Could not find user.'`);
+            return res.status(404).json({ message: 'Could not find user' });
+        }
+    
+        const followCount = existingUser.followers.length;
+    
+        
+        userLogger.info(`Status code: 200, Message: 'Fetched follow count successfully'`);
+        return res.status(200).json({ message: 'Successfully fetched follow count', followerCount: followCount});
+    } catch (error) {
+        userLogger.error(`Status code: 500, Message: 'Errorfetching follow count: Internal server error'`);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
 
 module.exports = { 
     deleteUser,
     editUser, 
     getAllUsers,
     followUser,
-    unfollowUser
+    unfollowUser,
+    getFollowerCount
 };

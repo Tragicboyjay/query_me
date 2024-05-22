@@ -7,7 +7,8 @@ const {
     editUser,
     getAllUsers,
     followUser,
-    unfollowUser
+    unfollowUser,
+    getFollowerCount
 } = require("../Controllers/UserContoller")
 
 router.delete("/", protect, deleteUser);
@@ -15,6 +16,7 @@ router.patch("/:field", protect, editUser);
 router.get("/all", getAllUsers);
 router.patch("/follow/:username", protect, followUser);
 router.patch("/unfollow/:username", protect, unfollowUser);
+router.get("/follow-count/:username", getFollowerCount);
 
 
 module.exports = router;
