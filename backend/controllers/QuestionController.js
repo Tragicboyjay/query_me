@@ -110,10 +110,40 @@ const getOwnQuestions = async function (req, res) {
     }
 };
 
+const getFeedQuestions = async function (req, res) {
+    try {
+        const user = req.user;
+        const usersFollowed = user.following;
+
+        // Check if the user is following anyone
+        if (usersFollowed.length === 0) {
+            questionLogger.info(`Status code: 200, Message: 'User is not following anyone.'`);
+            return res.status(200).json({ message: 'You are not following anyone yet.', questions: [] });
+        }
+
+        // Fetch all questions answered by the users followed
+        const questions = await Question.find({ recipient: { $in: usersFollowed } }).sort({ answerDate: -1 }).populate('recipient');
+
+        // Check if there are no questions
+        if (questions.length === 0) {
+            questionLogger.info(`Status code: 200, Message: 'Users followed have no answered questions.'`);
+            return res.status(200).json({ message: 'Users you are following have not answered any questions yet.', questions: [] });
+        }
+
+        questionLogger.info(`Status code: 200, Message: 'Fetched feed questions successfully'`);
+        return res.status(200).json({ message: 'Successfully fetched feed questions', questions: questions });
+    } catch (error) {
+        questionLogger.error(`Status code: 500, Message: 'Error fetching feed questions: Internal server error'`);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
 
 module.exports = {
     askQuestion,
     answerQuestion,
     getQuestionsByUser,
-    getOwnQuestions
+    getOwnQuestions,
+    getFeedQuestions
 };
