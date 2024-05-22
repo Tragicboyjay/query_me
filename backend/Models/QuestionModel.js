@@ -20,7 +20,6 @@ const questionSchema = mongoose.Schema({
     },
     answerDate: {
         type: Date,
-        default: Date.now
     }
 
 });

@@ -55,7 +55,7 @@ const answerQuestion = async function (req,res) {
             return res.status(400).json({ message: 'Question has already been answered' });
         };
 
-        await Question.findByIdAndUpdate(questionId, { answer: questionAnswer })
+        await Question.findByIdAndUpdate(questionId, { answer: questionAnswer, answerDate: Date.now() })
 
         questionLogger.info(`Status code: 200, Message: 'Question answered successfully. Question ID: ${questionId}'`);
         res.status(200).json({ message: 'Question answered successfully'});
