@@ -100,7 +100,8 @@ const SearchModal = () => {
                             mb="1rem"
                         />
                         <Box
-                            border={usernameMatches && usernameMatches.length > 0 && "1px"}
+                            // border={usernameMatches && usernameMatches.length > 0 && "1px"}
+                            // boxShadow={usernameMatches && usernameMatches.length > 0 && "inset 0 0 2px rgba(0, 0, 0, 0.5)"} 
                             borderColor="gray.200"
                             borderRadius="md"
                             maxHeight="400px"
@@ -114,12 +115,14 @@ const SearchModal = () => {
                                     p=".5rem"
                                     width="100%"
                                     key={username}
-                                    _hover={{ shadow: "base" }}
+                                    borderRadius="md"
+                                    _hover={{ color: "teal.200", shadow: "base" }}
+                                    onClick={() => handleUserClick(username)}
+                                    cursor="pointer"
                                 >
                                     <Center>
                                         <Heading 
                                             size="md"
-                                            onClick={() => handleUserClick(username)}
                                             cursor="pointer"
                                         >
                                             {username}
