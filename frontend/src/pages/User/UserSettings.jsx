@@ -21,6 +21,7 @@ import {
     Td,
     TableCaption,
     TableContainer,
+    useToast
 } from "@chakra-ui/react";
 
 import { useAuth } from "../../contexts/authContext"
@@ -32,6 +33,8 @@ const UserSettings = () => {
     const { user, logoutUser, updateUsername, updateEmail } = useAuth();
 
     const navigate = useNavigate();
+
+    const toast = useToast();
 
     const [ deleteUserError, setDeleteUserError ] = useState(null);
     const [ deletePasswordInput, setDeletePasswordInput ] = useState("")
@@ -124,11 +127,21 @@ const UserSettings = () => {
                 throw new Error(data.message)
             }
 
+            const data = await response.json()
+
             if (editField === "Username" ) {
                 updateUsername(newEditInput)
             } else if (editField === "Email" ) {
                 updateEmail(newEditInput)
             }
+
+            toast({
+                title: data.message,
+                status: 'success',
+                duration: 9000,
+                position: "top",
+                isClosable: true,
+            })
 
             setNewEditInput("");
             setEditPasswordInput("");

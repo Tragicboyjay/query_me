@@ -13,7 +13,8 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-    Textarea
+    Textarea,
+    useToast
 } from "@chakra-ui/react";
 import { useAuth } from '../../contexts/authContext';
 import { useNavigate, Link } from "react-router-dom";
@@ -30,6 +31,8 @@ const UserProfile = () => {
 
     const { user, logoutUser } = useAuth();
     const navigate = useNavigate();
+
+    const toast = useToast();
 
     const handleLogOut = () => {
         logoutUser();
@@ -117,9 +120,19 @@ const UserProfile = () => {
                 throw new Error(data.message);
             }
 
+            const data = await response.json()
+
             // Clear the answer and close the modal
             setQuestionAnswer("");
             toggleModal(questionId);
+
+            toast({
+                title: data.message,
+                status: 'success',
+                duration: 9000,
+                position: "top",
+                isClosable: true,
+            })
 
             // Optionally refresh the questions list
             fetchQuestions();
@@ -158,7 +171,7 @@ const UserProfile = () => {
             </Select>
 
             <Box
-                minHeight="350px" // Ensures it stays at the top even when empty
+                minHeight={["350px","350px","450px","850px"]} 
             >
                 {errorMessage && <Heading textAlign={"center"}>{errorMessage}</Heading>}
                 {!errorMessage && data && data.map(question => (

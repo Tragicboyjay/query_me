@@ -12,7 +12,8 @@ import {
     ModalCloseButton,
     Center,
     useDisclosure,
-    Textarea
+    Textarea,
+    useToast
  } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/authContext";
@@ -26,8 +27,9 @@ const UserQuestions = () => {
     const [ userQuestions, setUserQuestions ] = useState(null);
     const [ questionInput, setQuestionInput ] = useState("");
 
-    const { isOpen: isOpenSearch, onOpen: onOpenSearch, onClose: onCloseSearch } = useDisclosure();
+    const { isOpen: isOpenSearch, onOpen: onOpenSearch, onClose: onCloseSearch } = useDisclosure(); // made a mistake and added search to deferentiate the modoal on the nav and the ask question
     const navigate = useNavigate();
+    const toast = useToast()
 
     if (user.username === username) {
         navigate("/user-profile");
@@ -83,6 +85,16 @@ const UserQuestions = () => {
                 const data = await response.json();
                 throw new Error(data.message);
             }
+
+            const data = await response.json();
+
+            toast({
+                title: data.message,
+                status: 'success',
+                duration: 9000,
+                position: "top",
+                isClosable: true,
+            })
 
             setQuestionInput("");
             onCloseSearch();
