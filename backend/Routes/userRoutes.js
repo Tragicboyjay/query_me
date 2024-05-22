@@ -8,7 +8,8 @@ const {
     getAllUsers,
     followUser,
     unfollowUser,
-    getFollowerCount
+    getFollowerCount,
+    getUserFollowInfo
 } = require("../Controllers/UserContoller")
 
 router.delete("/", protect, deleteUser);
@@ -17,6 +18,7 @@ router.get("/all", getAllUsers);
 router.patch("/follow/:username", protect, followUser);
 router.patch("/unfollow/:username", protect, unfollowUser);
 router.get("/follow-count/:username", getFollowerCount);
+router.get("/follow-info", protect, getUserFollowInfo);
 
 
 module.exports = router;

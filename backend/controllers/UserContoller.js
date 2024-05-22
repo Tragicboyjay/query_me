@@ -191,7 +191,25 @@ const getFollowerCount = async function (req, res) {
         userLogger.info(`Status code: 200, Message: 'Fetched follow count successfully'`);
         return res.status(200).json({ message: 'Successfully fetched follow count', followerCount: followCount});
     } catch (error) {
-        userLogger.error(`Status code: 500, Message: 'Errorfetching follow count: Internal server error'`);
+        userLogger.error(`Status code: 500, Message: 'Error fetching follow count: Internal server error'`);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+const getUserFollowInfo = async function (req,res) {
+    try {
+        const user = req.user;
+
+        if (!user)  {
+            userLogger.info(`Status code: 404, Message: 'Error fetching user follow info: Could not find user.'`);
+            return res.status(404).json({ message: 'Could not find user' });
+        }
+
+        userLogger.info(`Status code: 200, Message: 'Fetched follow info successfully'`);
+        return res.status(200).json({ message: 'Successfully fetched follow info', followers: user.followers, following: user.following});
+
+    } catch (error) {
+        userLogger.error(`Status code: 500, Message: 'Error fetching user follow info: Internal server error'`);
         res.status(500).json({ message: 'Internal server error' });
     }
 }
@@ -203,5 +221,6 @@ module.exports = {
     getAllUsers,
     followUser,
     unfollowUser,
-    getFollowerCount
+    getFollowerCount,
+    getUserFollowInfo
 };
