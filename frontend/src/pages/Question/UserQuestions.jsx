@@ -24,6 +24,7 @@ const UserQuestions = () => {
     const { user } = useAuth();
     const { username } = useParams();
 
+
     const [ errorMessage, setErrorMessage ] = useState("");
     const [ userQuestions, setUserQuestions ] = useState([]);
     const [ questionInput, setQuestionInput ] = useState("");
@@ -41,7 +42,7 @@ const UserQuestions = () => {
     const navigate = useNavigate();
     const toast = useToast()
 
-    if (user.username === username) {
+    if (user && user.username === username) {
         navigate("/user-profile");
     }
 
@@ -137,14 +138,19 @@ const UserQuestions = () => {
     return (
         <Box width="100%" px={"15%"} my={"2rem"}>
             <Heading textAlign="center" mb="2rem">{username}</Heading>
+            { user &&
+                <Center mb="2em">
+                    <Button onClick={onOpenSearch} background="teal.200">Ask Question</Button>
+                </Center>
+            }
 
-            <Center mb="2em">
-                <Button onClick={onOpenSearch} background="teal.200">Ask Question</Button>
-            </Center>
 
             <Box minHeight="350px">
                 {errorMessage && <Heading textAlign={"center"}>{errorMessage}</Heading>}
-                {!errorMessage && userQuestions && records.map(question => (
+                {!errorMessage && userQuestions.length === 0 && (
+                    <Heading textAlign={"center"}>No questions found.</Heading>
+                )}
+                {!errorMessage && userQuestions.length > 0 && records.map(question => (
                     <Box key={question._id} p="1rem" boxShadow='base' mb="1rem">
                         <Heading size="lg" mb="1rem">{question.body}</Heading>
                         <Heading size="md" mb=".5rem">{question.recipient} answered: {question.answer}</Heading>
@@ -152,6 +158,7 @@ const UserQuestions = () => {
                     </Box>
                 ))}
 
+                {/* pagination */}
                 {userQuestions.length > recordsPerPage && 
                     <Flex
                         width="100%"

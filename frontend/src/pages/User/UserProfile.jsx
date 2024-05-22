@@ -19,8 +19,7 @@ import {
 import { useAuth } from '../../contexts/authContext';
 import { useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-// import Pagination from "../../components/Pagination";
-import PropTypes from 'prop-types';
+
 
 const UserProfile = () => {
     const [selectValue, setSelectValue] = useState("new");
@@ -287,9 +286,5 @@ const UserProfile = () => {
     );
 }
 
-UserProfile.propTypes = {
-    data: PropTypes.array.isRequired,
-    setData: PropTypes.func.isRequired
-};
  
 export default UserProfile;
