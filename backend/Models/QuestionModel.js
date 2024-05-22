@@ -17,7 +17,12 @@ const questionSchema = mongoose.Schema({
     creationDate: {
         type: Date,
         default: Date.now
+    },
+    answerDate: {
+        type: Date,
+        default: Date.now
     }
+
 });
 
 const Question = mongoose.model('Question', questionSchema);
