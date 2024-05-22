@@ -18,32 +18,42 @@ import {
 } from "@chakra-ui/react";
 import { useAuth } from '../../contexts/authContext';
 import { useNavigate, Link } from "react-router-dom";
-import { useEffect, useState} from "react";
-
+import { useEffect, useState } from "react";
+// import Pagination from "../../components/Pagination";
+import PropTypes from 'prop-types';
 
 const UserProfile = () => {
     const [selectValue, setSelectValue] = useState("new");
     const [errorMessage, setErrorMessage] = useState("");
-    const [data, setData] = useState(null);
+    const [data, setData] = useState([]); // Default to an empty array
     const [questionAnswer, setQuestionAnswer] = useState("");
     const [questionErrorMessage, setQuestionErrorMessage] = useState("");
     const [questionModals, setQuestionModals] = useState({});
 
+    // pagination
+    const [ currentPage, setCurrentPage ] = useState(1)
+    const recordsPerPage = 3;
+    const lastIndex = currentPage * recordsPerPage;
+    const firstIndex = lastIndex - recordsPerPage;
+    const records = data.slice( firstIndex, lastIndex );
+    const npages = Math.ceil(data.length / recordsPerPage);
+    const pageNumbers = [...Array(npages + 1).keys()].slice(1);
+
+    // const questionsPerPage = 3;
     const { user, logoutUser } = useAuth();
     const navigate = useNavigate();
-
     const toast = useToast();
 
     const handleLogOut = () => {
         logoutUser();
-        navigate('/sign-in', { replace: true })
-    }
+        navigate('/sign-in', { replace: true });
+    };
 
-    const formatDate = date => {
+    const formatDate = (date) => {
         const newDate = new Date(date);
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return newDate.toLocaleDateString('en-US', options);
-    }
+    };
 
     const fetchQuestions = async () => {
         try {
@@ -63,7 +73,6 @@ const UserProfile = () => {
             const data = await response.json();
 
             let questions;
-
             switch (selectValue) {
                 case "asked":
                     questions = data.questionsAsked.filter(question => question.answer);
@@ -84,9 +93,9 @@ const UserProfile = () => {
                     break;
             }
         } catch (error) {
-            setErrorMessage(error.message)
+            setErrorMessage(error.message);
         }
-    }
+    };
 
     useEffect(() => {
         fetchQuestions();
@@ -103,8 +112,8 @@ const UserProfile = () => {
         e.preventDefault();
 
         try {
-            setQuestionErrorMessage("")
-            const answer = { questionAnswer: questionAnswer }
+            setQuestionErrorMessage("");
+            const answer = { questionAnswer };
 
             const response = await fetch(`http://localhost:8001/question/answer/${questionId}`, {
                 method: "POST",
@@ -113,14 +122,14 @@ const UserProfile = () => {
                     'Authorization': `Bearer ${user.token}`
                 },
                 body: JSON.stringify(answer)
-            })
+            });
 
             if (!response.ok) {
                 const data = await response.json();
                 throw new Error(data.message);
             }
 
-            const data = await response.json()
+            const data = await response.json();
 
             // Clear the answer and close the modal
             setQuestionAnswer("");
@@ -132,13 +141,29 @@ const UserProfile = () => {
                 duration: 9000,
                 position: "top",
                 isClosable: true,
-            })
+            });
 
             // Optionally refresh the questions list
             fetchQuestions();
-            
         } catch (error) {
-            setQuestionErrorMessage(error.message)
+            setQuestionErrorMessage(error.message);
+        }
+    };
+
+    // pagination function
+    const previousPage = () => {
+        if (currentPage !== 1 ) {
+            setCurrentPage(currentPage - 1)
+        }
+    }
+
+    const changePage = n => {
+        setCurrentPage(n)
+    }
+
+    const nextPage = () => {
+        if (currentPage !== lastIndex ) {
+            setCurrentPage(currentPage + 1)
         }
     }
 
@@ -148,14 +173,16 @@ const UserProfile = () => {
                 direction={["column", "row", "row", "row"]} 
                 width={"100%"}
                 mb="2rem"
-                textAlign={["center", "left","left","left"]}
+                textAlign={["center", "left", "left", "left"]}
                 justify="center"
                 align="center"
              >
                 <Heading 
                     mb={["1rem", "", "", ""]}
                     textAlign="center"
-                >{user.username} <Link to="/user-profile/settings"><i style={{cursor: "pointer", color: "lightgrey"}} className="fa-solid fa-gear"></i></Link></Heading>
+                >
+                    {user.username} <Link to="/user-profile/settings"><i style={{cursor: "pointer", color: "lightgrey"}} className="fa-solid fa-gear"></i></Link>
+                </Heading>
                 <Spacer />
                 <Button onClick={handleLogOut} background={"red.400"}>Log out</Button>
             </Flex>
@@ -170,11 +197,9 @@ const UserProfile = () => {
                 <option value="answered">Answered Questions</option>
             </Select>
 
-            <Box
-                minHeight={["350px","350px","450px","850px"]} 
-            >
+            <Box minHeight={["350px", "350px", "450px", "850px"]}>
                 {errorMessage && <Heading textAlign={"center"}>{errorMessage}</Heading>}
-                {!errorMessage && data && data.map(question => (
+                {!errorMessage && records.length > 0 && records.map(question => (
                     <Box 
                         key={question._id} 
                         p="1rem"
@@ -193,37 +218,78 @@ const UserProfile = () => {
                         <Modal isOpen={questionModals[question._id]} onClose={() => toggleModal(question._id)}>
                             <ModalOverlay />
                             <ModalContent>
-                            <ModalHeader>Answer Question</ModalHeader>
-                            <ModalCloseButton />
-                            <form onSubmit={(e) => answerQuestion(e, question._id)}>
-                                <ModalBody>
-                                    { questionErrorMessage && <Text color="red">{questionErrorMessage}</Text>}
-                                    <Heading 
-                                        textAlign="center"
-                                        size="sm" 
-                                        mb="1rem"
-                                    >{question.body}</Heading>
-                                    <Textarea
-                                        placeholder="Question answer"
-                                        value={questionAnswer}
-                                        onChange={e => setQuestionAnswer(e.target.value)}
-                                    ></Textarea> 
-                                </ModalBody>
-                                <ModalFooter>
-                                    <Button 
-                                        type="submit"
-                                        background="teal.200"
-                                    >Answer Question</Button>
-                                </ModalFooter>
-                            </form>
+                                <ModalHeader>Answer Question</ModalHeader>
+                                <ModalCloseButton />
+                                <form onSubmit={(e) => answerQuestion(e, question._id)}>
+                                    <ModalBody>
+                                        { questionErrorMessage && <Text color="red">{questionErrorMessage}</Text>}
+                                        <Heading 
+                                            textAlign="center"
+                                            size="sm" 
+                                            mb="1rem"
+                                        >{question.body}</Heading>
+                                        <Textarea
+                                            placeholder="Question answer"
+                                            value={questionAnswer}
+                                            onChange={e => setQuestionAnswer(e.target.value)}
+                                        ></Textarea> 
+                                    </ModalBody>
+                                    <ModalFooter>
+                                        <Button 
+                                            type="submit"
+                                            background="teal.200"
+                                        >Answer Question</Button>
+                                    </ModalFooter>
+                                </form>
                             </ModalContent>
                         </Modal>
-                        
                     </Box>
                 ))}
+                {!errorMessage && data.length === 0 && (
+                    <Heading textAlign={"center"}>No questions found.</Heading>
+                )}
+
+
+                {data.length > recordsPerPage && 
+                    <Flex
+                        width="100%"
+                        justify="center"
+                    >
+
+                        <Button
+                            onClick={previousPage}
+                        >Prev</Button>
+
+                        {
+                            pageNumbers.map( (number, index) => (
+                                <Button
+                                    key={index}
+                                    backgroundColor={number === currentPage && "teal.200"}
+                                    onClick={() => changePage(number)}
+                                >{number}</Button>
+                            ))
+                        }
+
+                        
+                        <Button
+                            onClick={nextPage}
+                        >Next</Button>
+                        
+
+
+                    </Flex>
+                }
+                
+                
             </Box>
+            
         </Box> 
     );
 }
+
+UserProfile.propTypes = {
+    data: PropTypes.array.isRequired,
+    setData: PropTypes.func.isRequired
+};
  
 export default UserProfile;

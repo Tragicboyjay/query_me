@@ -13,7 +13,8 @@ import {
     Center,
     useDisclosure,
     Textarea,
-    useToast
+    useToast,
+    Flex
  } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/authContext";
@@ -24,8 +25,17 @@ const UserQuestions = () => {
     const { username } = useParams();
 
     const [ errorMessage, setErrorMessage ] = useState("");
-    const [ userQuestions, setUserQuestions ] = useState(null);
+    const [ userQuestions, setUserQuestions ] = useState([]);
     const [ questionInput, setQuestionInput ] = useState("");
+
+    // pagination
+    const [ currentPage, setCurrentPage ] = useState(1)
+    const recordsPerPage = 3;
+    const lastIndex = currentPage * recordsPerPage;
+    const firstIndex = lastIndex - recordsPerPage;
+    const records = userQuestions.slice( firstIndex, lastIndex );
+    const npages = Math.ceil(userQuestions.length / recordsPerPage);
+    const pageNumbers = [...Array(npages + 1).keys()].slice(1);
 
     const { isOpen: isOpenSearch, onOpen: onOpenSearch, onClose: onCloseSearch } = useDisclosure(); // made a mistake and added search to deferentiate the modoal on the nav and the ask question
     const navigate = useNavigate();
@@ -107,6 +117,23 @@ const UserQuestions = () => {
         fetchQuestions();
     }, []);
 
+    // pagination function
+    const previousPage = () => {
+        if (currentPage !== 1 ) {
+            setCurrentPage(currentPage - 1)
+        }
+    }
+
+    const changePage = n => {
+        setCurrentPage(n)
+    }
+
+    const nextPage = () => {
+        if (currentPage !== lastIndex ) {
+            setCurrentPage(currentPage + 1)
+        }
+    }
+
     return (
         <Box width="100%" px={"15%"} my={"2rem"}>
             <Heading textAlign="center" mb="2rem">{username}</Heading>
@@ -117,13 +144,44 @@ const UserQuestions = () => {
 
             <Box minHeight="350px">
                 {errorMessage && <Heading textAlign={"center"}>{errorMessage}</Heading>}
-                {!errorMessage && userQuestions && userQuestions.map(question => (
+                {!errorMessage && userQuestions && records.map(question => (
                     <Box key={question._id} p="1rem" boxShadow='base' mb="1rem">
                         <Heading size="lg" mb="1rem">{question.body}</Heading>
                         <Heading size="md" mb=".5rem">{question.recipient} answered: {question.answer}</Heading>
                         <Text>{formatDate(question.creationDate)}</Text>
                     </Box>
                 ))}
+
+                {userQuestions.length > recordsPerPage && 
+                    <Flex
+                        width="100%"
+                        justify="center"
+                    >
+
+                        <Button
+                            onClick={previousPage}
+                        >Prev</Button>
+
+                        {
+                            pageNumbers.map( (number, index) => (
+                                <Button
+                                    key={index}
+                                    backgroundColor={number === currentPage && "teal.200"}
+                                    onClick={() => changePage(number)}
+                                >{number}</Button>
+                            ))
+                        }
+
+                        
+                        <Button
+                            onClick={nextPage}
+                        >Next</Button>
+                        
+
+
+                    </Flex>
+                }
+                
             </Box>
 
             <Modal isOpen={isOpenSearch} onClose={onCloseSearch}>
@@ -148,6 +206,7 @@ const UserQuestions = () => {
                     </ModalContent>
                 </form>
             </Modal>
+
         </Box>
     );
 }
