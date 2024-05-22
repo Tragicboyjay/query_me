@@ -8,12 +8,13 @@ import {
     useColorModeValue,
     Stack,
     Text,
-    Heading
+    Heading,
   } from '@chakra-ui/react';
   import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
   import PropTypes from 'prop-types'; // Import PropTypes
   import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'; // Import Link from React Router
   import { useAuth } from '../contexts/authContext';
+  import SearchModal from './SearchModal';
 
 
   const NavLink = ({ children, to }) => (
@@ -68,6 +69,7 @@ import {
                 {Links.map((link) => (
                   <NavLink key={link.name} to={link.to}>{link.name}</NavLink>
                 ))}
+                <SearchModal />
               </HStack>
             </HStack>
             <Flex alignItems={'center'}>
@@ -76,7 +78,6 @@ import {
                   display={["none", "block"]}
                   cursor="pointer"
                 ><i className="fa-solid fa-user"></i> {user.username}</Text>}
-              
             </Flex>
           </Flex>
   
@@ -86,7 +87,9 @@ import {
                 {Links.map((link) => (
                   <NavLink key={link.name} to={link.to}>{link.name}</NavLink>
                 ))}
+                <SearchModal />
               </Stack>
+              
             </Box>
           ) : null}
         </Box>

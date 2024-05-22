@@ -1,8 +1,9 @@
 import { Heading } from "@chakra-ui/react";
 
-const Home = () => {
+const Home = () => { 
     return ( 
         <Heading>Home</Heading>
+        
     );
 }
  

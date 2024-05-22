@@ -105,7 +105,7 @@ const editUser = async function (req,res) {
 
 const getAllUsers = async function (req,res) {
     try {
-        const allUsers = await User.find({});
+        const allUsers = await User.find({}).select("-password");
 
         userLogger.info(`Status code: 200, Message: 'Users fetched successfully`);
         res.status(200).json({ message: `Users fetched successfully`, users: allUsers }); 
