@@ -66,6 +66,7 @@ const SignUp = () => {
             toast({
                 title: 'Account created.',
                 description: data.message,
+                position: "top",
                 status: 'success',
                 duration: 9000,
                 isClosable: true,
