@@ -110,13 +110,76 @@ const getAllUsers = async function (req,res) {
         userLogger.info(`Status code: 200, Message: 'Users fetched successfully`);
         res.status(200).json({ message: `Users fetched successfully`, users: allUsers }); 
     } catch (error) {
-        userLogger.error(`Status code: 500, Message: 'Error fetching users: Internal server error'`);
+
+    }
+}
+
+const followUser = async function (req,res) {
+    try {
+        const followerUser = req.user;
+        const followedUsername = req.params.username;
+        const followedUser = await User.findOne({ username: followedUsername });
+    
+        if (!followedUser)  {
+            userLogger.info(`Status code: 404, Message: 'Error following user: Could not find user.'`);
+            return res.status(404).json({ message: 'Could not find user' });
+        }
+
+        
+        if (followedUser.followers.includes(followerUser.username)) {
+            userLogger.info(`Status code: 400, Message: 'Error following user: already following.'`);
+            return res.status(400).json({ message: 'You are already following this user' });
+        }
+
+
+        followedUser.followers.push(followerUser.username);
+        followerUser.following.push(followedUsername);
+        await followedUser.save();
+        await followerUser.save();
+
+        userLogger.info(`Status code: 200, Message: '${req.user.username} followed ${followedUsername} successfully`);
+        return res.status(200).json({ message: 'Successfully followed user' });
+    } catch (error) {
+        userLogger.error(`Status code: 500, Message: 'Error following users: Internal server error'`);
         res.status(500).json({ message: 'Internal server error' });
     }
 }
 
+const unfollowUser = async function (req, res) {
+    try {
+        const followerUser = req.user;
+        const followedUsername = req.params.username;
+        const followedUser = await User.findOne({ username: followedUsername });
+    
+        if (!followedUser)  {
+            userLogger.info(`Status code: 404, Message: 'Error unfollowing user: Could not find user.'`);
+            return res.status(404).json({ message: 'Could not find user' });
+        }
+
+        if (!followedUser.followers.includes(followerUser.username)) {
+            userLogger.info(`Status code: 400, Message: 'Error unfollowing user: Not following.'`);
+            return res.status(400).json({ message: 'You are not following this user' });
+        }
+
+        followedUser.followers = followedUser.followers.filter(username => username !== followerUser.username);
+        followerUser.following = followerUser.following.filter(username => username !== followedUsername);
+        
+        await followedUser.save();
+        await followerUser.save();
+
+        userLogger.info(`Status code: 200, Message: '${req.user.username} unfollowed ${followedUsername} successfully'`);
+        return res.status(200).json({ message: 'Successfully unfollowed user' });
+    } catch (error) {
+        userLogger.error(`Status code: 500, Message: 'Error unfollowing user: Internal server error'`);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
 module.exports = { 
     deleteUser,
     editUser, 
-    getAllUsers
+    getAllUsers,
+    followUser,
+    unfollowUser
 };
