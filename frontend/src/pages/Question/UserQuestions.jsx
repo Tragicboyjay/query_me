@@ -14,14 +14,17 @@ import {
     useDisclosure,
     Textarea,
     useToast,
-    Flex
+    Flex,
+    Spacer,
+    Image
  } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/authContext";
 import { useNavigate, useParams } from "react-router-dom";
+import followerIcon from "../../assets/followers.png"
 
 const UserQuestions = () => {
-    const { user } = useAuth();
+    const { user, followUserX, unfollowUserX } = useAuth();
     const { username } = useParams();
 
     // question fetch
@@ -31,6 +34,7 @@ const UserQuestions = () => {
 
     // follow functionality 
     const [ following, setFollowing ] = useState(false);
+    const [ followCount, setFollowCount ] = useState(0);
 
     // pagination
     const [ currentPage, setCurrentPage ] = useState(1)
@@ -49,15 +53,19 @@ const UserQuestions = () => {
 
     useEffect(() => {
         document.title = username + " | Query-Me"
+
         setFollowing(isFollowing());
-        console.log(user)
+
+        fetchQuestions();
+
+        if (user && user.username === username) {
+            navigate("/user-profile");
+        }
     }, [])
 
-
-    if (user && user.username === username) {
-        navigate("/user-profile");
-        console.log(user)
-    }
+    useEffect( () => {
+        getFollowCount();
+    }, [following])
 
     const formatDate = date => {
         const newDate = new Date(date);
@@ -127,10 +135,6 @@ const UserQuestions = () => {
         }
     };
 
-    useEffect(() => {
-        fetchQuestions();
-    }, []);
-
     // pagination function
     const previousPage = () => {
         if (currentPage !== 1 ) {
@@ -167,6 +171,7 @@ const UserQuestions = () => {
                 throw new Error(data.message)
             }
 
+            followUserX(username)
             setFollowing(true);
 
             toast({
@@ -204,6 +209,7 @@ const UserQuestions = () => {
             }
 
             setFollowing(false);
+            unfollowUserX(username)
 
             toast({
                 title: `${username} succesully unfollowed.`,
@@ -224,24 +230,62 @@ const UserQuestions = () => {
         }
     }
 
+    const getFollowCount = async () => {
+        try {
+            const response = await fetch(`http://localhost:8001/user/follow-count/${username}`)
+
+            if(!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message);
+            }
+
+            const data = await response.json();
+            const count = data.followerCount;
+
+            setFollowCount(count);
+        } catch (error) {
+            toast({
+                title: error.message,
+                status: 'error',
+                position: "top",
+                duration: 9000,
+                isClosable: true,
+            })
+        }
+    }
+
     return (
         <Box width="100%" px={"15%"} my={"2rem"}>
-            <Heading textAlign="center" mb="2rem">
-                {username} {user && (
-                <Button 
-                    backgroundColor={following ? "teal.200" : ""}
-
-                    onClick={ following ? unFollowUser : followUser}
-                    
+            <Flex
+                width="100%"
+                align="center"
+                mb="2rem"
+            >
+                <Heading size="md" textAlign="center">
+                    {username} {user && (
+                    <Button 
+                        backgroundColor={following ? "teal.200" : ""}
+                        size="sm"
+                        onClick={ following ? unFollowUser : followUser}
+                        
+                    >
+                        {!following ? (
+                            <i className="fa-solid fa-user-plus"></i>
+                        ) : (
+                            <i className="fa-solid fa-check"></i>
+                        )}
+                    </Button>
+                )}
+                </Heading>
+                <Spacer />
+                <Flex
+                    align="center"
                 >
-                    {!following ? (
-                        <i className="fa-solid fa-user-plus"></i>
-                    ) : (
-                        <i className="fa-solid fa-check"></i>
-                    )}
-                </Button>
-            )}
-            </Heading>
+                    <Heading size="md">{followCount}</Heading>
+                    <Image src={followerIcon} boxSize="3rem" alt="follower icon" />
+                </Flex>
+                
+            </Flex>
             { user &&
                 <Center mb="2em">
                     <Button onClick={onOpenSearch} background="teal.200">Ask Question</Button>
