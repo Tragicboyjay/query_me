@@ -42,6 +42,11 @@ const UserQuestions = () => {
     const navigate = useNavigate();
     const toast = useToast()
 
+    useEffect(() => {
+        document.title = username + " | Query-Me"
+    }, [])
+
+
     if (user && user.username === username) {
         navigate("/user-profile");
     }

@@ -1,10 +1,15 @@
 import { Box, Heading, Image, Button, Center } from "@chakra-ui/react";
 import gif from "../assets/404.gif"
-
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const PageNotFound = () => {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        document.title = "404 Page Not Found"
+    }, [])
+
     
     return (  
         <Box

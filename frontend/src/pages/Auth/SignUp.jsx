@@ -1,6 +1,6 @@
 import { FormControl, Heading, FormLabel, Input, Center, Button, Text, Link as ChakraLink, Box, useToast } from "@chakra-ui/react";
 import { Link as ReactRouterLink, useNavigate} from 'react-router-dom';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/authContext";
 
 const SignUp = () => {
@@ -9,9 +9,17 @@ const SignUp = () => {
     const [passwordInput, setPasswordInput] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
-    const { loginUser } = useAuth();
+    const { loginUser, user } = useAuth();
     const navigate = useNavigate();
     const toast = useToast();
+
+    useEffect(() => {
+        document.title = "Sign Up | Query-Me"
+        if (user) {
+            navigate("/user-profile");
+        }
+    }, [])
+
 
     const handleSignUp = async e => {
         e.preventDefault(); 

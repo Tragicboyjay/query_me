@@ -26,7 +26,7 @@ import {
 
 import { useAuth } from "../../contexts/authContext"
 import { useNavigate } from "react-router-dom"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 
 const UserSettings = () => {
@@ -46,6 +46,11 @@ const UserSettings = () => {
 
     const { isOpen: deleteIsOpen, onOpen: deleteOnOpen, onClose: deleteOnClose } = useDisclosure();
     const { isOpen: editIsOpen, onOpen: editOnOpen, onClose: editOnClose } = useDisclosure();
+
+    useEffect(() => {
+        document.title = "My Settings | Query-Me"
+    }, [])
+
 
     const deleteUser = async e => {
         try {

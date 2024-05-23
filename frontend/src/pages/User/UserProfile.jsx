@@ -43,6 +43,11 @@ const UserProfile = () => {
     const navigate = useNavigate();
     const toast = useToast();
 
+    useEffect(() => {
+        document.title = "My Profile | Query-Me"
+    },[])
+
+
     const handleLogOut = () => {
         logoutUser();
         navigate('/sign-in', { replace: true });
@@ -99,6 +104,10 @@ const UserProfile = () => {
     useEffect(() => {
         fetchQuestions();
     }, [selectValue]);
+
+    useEffect(() => {
+        document.title = "My Profile | Query-Me"
+    })
 
     const toggleModal = (questionId) => {
         setQuestionModals(prevState => ({
