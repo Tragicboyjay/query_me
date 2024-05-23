@@ -24,10 +24,13 @@ const UserQuestions = () => {
     const { user } = useAuth();
     const { username } = useParams();
 
-
+    // question fetch
     const [ errorMessage, setErrorMessage ] = useState("");
     const [ userQuestions, setUserQuestions ] = useState([]);
     const [ questionInput, setQuestionInput ] = useState("");
+
+    // follow functionality 
+    const [ following, setFollowing ] = useState(false);
 
     // pagination
     const [ currentPage, setCurrentPage ] = useState(1)
@@ -42,13 +45,18 @@ const UserQuestions = () => {
     const navigate = useNavigate();
     const toast = useToast()
 
+    
+
     useEffect(() => {
         document.title = username + " | Query-Me"
+        setFollowing(isFollowing());
+        console.log(user)
     }, [])
 
 
     if (user && user.username === username) {
         navigate("/user-profile");
+        console.log(user)
     }
 
     const formatDate = date => {
@@ -138,11 +146,102 @@ const UserQuestions = () => {
         if (currentPage !== lastIndex ) {
             setCurrentPage(currentPage + 1)
         }
+    } 
+
+    const isFollowing = () => {
+        return user && user.following && user.following.includes(username);
+    }
+
+    const followUser = async () => {
+        try {
+            const response = await fetch(`http://localhost:8001/user/follow/${username}`, {
+                method: "PATCH",
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                }
+            }); 
+
+            if (!response.ok){
+                const data = await response.json();
+                throw new Error(data.message)
+            }
+
+            setFollowing(true);
+
+            toast({
+                title: `${username} succesully followed.`,
+                status: 'success',
+                position: "top",
+                duration: 9000,
+                isClosable: true,
+            })
+
+        } catch (error) {
+            toast({
+                title: error.message,
+                status: 'error',
+                position: "top",
+                duration: 9000,
+                isClosable: true,
+            })
+        }
+    }
+
+    const unFollowUser = async () => {
+        try {
+            const response = await fetch(`http://localhost:8001/user/unfollow/${username}`, {
+                method: "PATCH",
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                }
+            }); 
+
+            if (!response.ok){
+                const data = await response.json();
+                throw new Error(data.message)
+            }
+
+            setFollowing(false);
+
+            toast({
+                title: `${username} succesully unfollowed.`,
+                status: 'success',
+                position: "top",
+                duration: 9000,
+                isClosable: true,
+            })
+
+        } catch (error) {
+            toast({
+                title: error.message,
+                status: 'error',
+                position: "top",
+                duration: 9000,
+                isClosable: true,
+            })
+        }
     }
 
     return (
         <Box width="100%" px={"15%"} my={"2rem"}>
-            <Heading textAlign="center" mb="2rem">{username}</Heading>
+            <Heading textAlign="center" mb="2rem">
+                {username} {user && (
+                <Button 
+                    backgroundColor={following ? "teal.200" : ""}
+
+                    onClick={ following ? unFollowUser : followUser}
+                    
+                >
+                    {!following ? (
+                        <i className="fa-solid fa-user-plus"></i>
+                    ) : (
+                        <i className="fa-solid fa-check"></i>
+                    )}
+                </Button>
+            )}
+            </Heading>
             { user &&
                 <Center mb="2em">
                     <Button onClick={onOpenSearch} background="teal.200">Ask Question</Button>

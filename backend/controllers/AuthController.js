@@ -33,14 +33,16 @@ async function createUser(req,res) {
             email: email
         });
 
-        await newUser.save();
+        const addedUser = await newUser.save();
 
         authLogger.info(`Status code: 200, Message: 'User created successfully, User: ${newUser}`);
         res.status(201).json({ message: 'User created successfully', user: {
             username: newUser.username,
             email: newUser.email,
             id: newUser._id,
-            token: generateToken(newUser._id)
+            following: addedUser.following,
+            token: generateToken(newUser._id),
+
         } });
 
     } catch (error) {
@@ -76,6 +78,7 @@ const authenticateUser = async function (req,res) {
             username: existingUser.username,
             email: existingUser.email,
             id: existingUser._id,
+            following: existingUser.following,
             token: generateToken(existingUser._id)
         }});
 
