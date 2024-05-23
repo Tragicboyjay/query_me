@@ -217,7 +217,10 @@ const UserProfile = () => {
                         <Heading size="lg" mb="1rem">{question.body}</Heading>
                         {selectValue === "asked" && <Heading size="md" mb=".5rem">{question.recipient} answered: {question.answer}</Heading>}
                         {selectValue === "answered" && <Heading size="md" mb=".5rem">You answered: {question.answer}</Heading>}
-                        <Text>{formatDate(question.creationDate)}</Text>
+
+                        {selectValue === "asked" ? <Text>Answered: {formatDate(question.answerDate)}</Text> : 
+                        selectValue === "new" ? <Text>Asked: {formatDate(question.creationDate)}</Text> : 
+                        <Text>Asked: {formatDate(question.creationDate)} <br /> Answered: {formatDate(question.answerDate)}</Text>}
 
                         {selectValue === "new" && 
                             <Button onClick={() => toggleModal(question._id)} mt="1rem" background="teal.200">Answer Question</Button>

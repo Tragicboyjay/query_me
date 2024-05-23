@@ -302,7 +302,7 @@ const UserQuestions = () => {
                     <Box key={question._id} p="1rem" boxShadow='base' mb="1rem">
                         <Heading size="lg" mb="1rem">{question.body}</Heading>
                         <Heading size="md" mb=".5rem">{question.recipient} answered: {question.answer}</Heading>
-                        <Text>{formatDate(question.creationDate)}</Text>
+                        <Text>Answered: {formatDate(question.answerDate)}</Text>
                     </Box>
                 ))}
 
