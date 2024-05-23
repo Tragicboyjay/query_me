@@ -16,10 +16,15 @@ import search from "../assets/search.svg";
 import answer from "../assets/answer.svg";
 
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react"; 
 
 
 const Home = () => { 
     const navigate = useNavigate();
+
+    useEffect( () => {
+        document.title = "Home | Query-Me"
+    })
 
     return (
         <Flex

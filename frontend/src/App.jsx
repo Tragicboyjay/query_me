@@ -11,6 +11,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PageNotFound from "./pages/PageNotFound";
 import UserNotFound from "./pages/UserNotFound"
 import { Flex,Box } from "@chakra-ui/react";
+import MyFeed from "./pages/User/MyFeed";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/user-profile" element={<UserProfile />} />
             <Route path="/user-profile/settings" element={<UserSettings />} />
+            <Route path="/feed" element={<MyFeed />} />
           </Route>
           <Route path="/user-not-found/:username" element={<UserNotFound />} />
           <Route path="*" element={<PageNotFound />} />

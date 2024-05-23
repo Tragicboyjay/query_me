@@ -45,7 +45,8 @@ import {
     const { user } = useAuth();
     let Links;
 
-    { user ? Links = [{ name: 'Home', to: '/' }, { name: 'My profile', to: '/user-profile' }] : Links = [{ name: 'Home', to: '/' }, { name: 'Sign in', to: '/sign-in' }]}
+    { user ? Links = [{ name: 'Home', to: '/' }, { name: "My feed", to: '/feed' }, { name: 'My profile', to: '/user-profile' }] : 
+    Links = [{ name: 'Home', to: '/' }, { name: 'Sign in', to: '/sign-in' }]}
 
     const navigate = useNavigate();
   
