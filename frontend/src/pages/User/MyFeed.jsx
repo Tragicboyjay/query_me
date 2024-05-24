@@ -118,8 +118,10 @@ const MyFeed = () => {
             </Flex>
             
 
-            <Box>
-                {!feedQuestionError && feedQuestions.data.length < 1 && <Heading size="md">{feedQuestions.message}</Heading>}
+            <Box
+                minH={["350px", "350px", "450px", "850px"]}
+            >
+                {!feedQuestionError && feedQuestions.data.length < 1 && <Heading textAlign="center">{feedQuestions.message}</Heading>}
                 {!feedQuestionError && feedQuestions.data.length > 0 && records.map(question => (
                     <Box 
                         key={question._id} 

@@ -55,7 +55,7 @@ const SignIn = () => {
 
             loginUser(data.user);
 
-            navigate("/user-profile")
+            navigate("/feed")
             
         } catch (error) {
             setErrorMessage(error.message);

@@ -294,7 +294,7 @@ const UserQuestions = () => {
             }
 
 
-            <Box minHeight="350px">
+            <Box minH={["350px", "350px", "450px", "850px"]}>
                 {errorMessage && <Heading textAlign={"center"}>{errorMessage}</Heading>}
                 {!errorMessage && userQuestions.length === 0 && (
                     <Heading textAlign={"center"}>No questions found.</Heading>
