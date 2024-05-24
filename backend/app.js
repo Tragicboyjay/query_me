@@ -20,6 +20,9 @@ app.use("/auth", authRoute);
 app.use("/user", userRoute);
 app.use("/question", questionRoute);
 
+app.get("/", (req,res) => {
+    res.send("it-works")
+})
 
 // log request middleware
 app.use((req,res,next) => {
