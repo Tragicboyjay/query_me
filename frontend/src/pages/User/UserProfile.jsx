@@ -21,6 +21,7 @@ import { useAuth } from '../../contexts/authContext';
 import { useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import FollowingModal from "../../components/FollowingModal";
+import CharacterInput from "../../components/CharacterInput";
 
 
 const UserProfile = () => {
@@ -44,6 +45,8 @@ const UserProfile = () => {
     const { user, logoutUser } = useAuth();
     const navigate = useNavigate();
     const toast = useToast();
+
+    const [ tooManyCharacters, setTooManyCharacters ] = useState(false)
 
     useEffect(() => {
         document.title = "My Profile | Query-Me"
@@ -125,6 +128,8 @@ const UserProfile = () => {
             ...prevState,
             [questionId]: !prevState[questionId]
         }));
+
+        setQuestionAnswer("")
     };
 
     const answerQuestion = async (e, questionId) => {
@@ -168,6 +173,7 @@ const UserProfile = () => {
             setQuestionErrorMessage(error.message);
         }
     };
+
 
     // pagination function
     const previousPage = () => {
@@ -276,9 +282,14 @@ const UserProfile = () => {
                                             value={questionAnswer}
                                             onChange={e => setQuestionAnswer(e.target.value)}
                                         ></Textarea> 
+                                        <CharacterInput input={questionAnswer.length} func={setTooManyCharacters} />
                                     </ModalBody>
                                     <ModalFooter>
+                                    <Button  mr={3} onClick={() => toggleModal(question._id)}>
+                                        Close
+                                    </Button>
                                         <Button 
+                                            isDisabled={tooManyCharacters}
                                             type="submit"
                                             background="teal.200"
                                         >Answer Question</Button>

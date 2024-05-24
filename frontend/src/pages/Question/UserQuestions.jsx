@@ -22,6 +22,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/authContext";
 import { useNavigate, useParams } from "react-router-dom";
 import followerIcon from "../../assets/followers.png"
+import CharacterInput from "../../components/CharacterInput";
 
 const UserQuestions = () => {
     const { user, followUserX, unfollowUserX } = useAuth();
@@ -44,6 +45,8 @@ const UserQuestions = () => {
     const records = userQuestions.slice( firstIndex, lastIndex );
     const npages = Math.ceil(userQuestions.length / recordsPerPage);
     const pageNumbers = [...Array(npages + 1).keys()].slice(1);
+
+    const [ tooManyCharacters, setTooManyCharacters ] = useState(false)
 
     const { isOpen: isOpenSearch, onOpen: onOpenSearch, onClose: onCloseSearch } = useDisclosure(); // made a mistake and added search to deferentiate the modoal on the nav and the ask question
     const navigate = useNavigate();
@@ -135,6 +138,11 @@ const UserQuestions = () => {
             setErrorMessage(error.message);
         }
     };
+
+    const handleModalClose = () => {
+        setQuestionInput("")
+        onCloseSearch()
+    }
 
     // pagination function
     const previousPage = () => {
@@ -340,7 +348,7 @@ const UserQuestions = () => {
                 
             </Box>
 
-            <Modal isOpen={isOpenSearch} onClose={onCloseSearch}>
+            <Modal isOpen={isOpenSearch} onClose={handleModalClose}>
                 <ModalOverlay />
                 <form onSubmit={askQuestion}>
                     <ModalContent>
@@ -352,12 +360,17 @@ const UserQuestions = () => {
                                 value={questionInput}
                                 onChange={e => setQuestionInput(e.target.value)}
                             />
+                            <CharacterInput input={questionInput.length} func={setTooManyCharacters}/>
                         </ModalBody>
                         <ModalFooter>
-                            <Button background="red.400" mr={3} onClick={onCloseSearch}>
+                            <Button  mr={3} onClick={handleModalClose}>
                                 Close
                             </Button>
-                            <Button background="teal.200" type="submit">Ask question</Button>
+                            <Button
+                             background="teal.200" 
+                             type="submit"
+                             isDisabled={tooManyCharacters ? true : false}
+                            >Ask question</Button>
                         </ModalFooter>
                     </ModalContent>
                 </form>
