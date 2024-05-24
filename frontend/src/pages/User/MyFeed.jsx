@@ -30,7 +30,7 @@ const MyFeed = () => {
     const navigate = useNavigate()
 
     useEffect( () => {
-        document.title = "My Profile | Query-Me"
+        document.title = "My Feed | Query-Me"
         getFeedQuestions()
     }, [])
 

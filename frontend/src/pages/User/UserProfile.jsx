@@ -14,11 +14,13 @@ import {
     ModalBody,
     ModalCloseButton,
     Textarea,
-    useToast
+    useToast,
+    Tooltip
 } from "@chakra-ui/react";
 import { useAuth } from '../../contexts/authContext';
 import { useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import FollowingModal from "../../components/FollowingModal";
 
 
 const UserProfile = () => {
@@ -194,14 +196,35 @@ const UserProfile = () => {
                 justify="center"
                 align="center"
              >
-                <Heading 
+                <Flex
+                    align="center"
                     mb={["1rem", "", "", ""]}
-                    textAlign="center"
+                    gap="1rem"
+                    direction={["column", "row", "row", "row"]} 
                 >
-                    {user.username} <Link to="/user-profile/settings"><i style={{cursor: "pointer", color: "lightgrey"}} className="fa-solid fa-gear"></i></Link>
-                </Heading>
+                    <Heading 
+                        textAlign="center"
+                    >
+                        {user.username} 
+                    </Heading>
+                    <FollowingModal />  
+                </Flex>
+
                 <Spacer />
-                <Button onClick={handleLogOut} background={"red.400"}>Log out</Button>
+                <Flex
+                    align="center"
+                    gap="1rem"
+                >   
+                    <Tooltip label="Settings">
+                        <Heading size="lg">
+                            <Link to="/user-profile/settings"><i style={{cursor: "pointer", color: "lightgrey"}} className="fa-solid fa-gear"></i></Link>
+                        </Heading>
+                        
+                    </Tooltip>
+                    
+                    <Button onClick={handleLogOut} background={"red.400"}>Log out</Button>
+                </Flex>
+
             </Flex>
             <Heading textAlign="center" mb="1rem">Questions</Heading>
             <Select

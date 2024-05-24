@@ -46,7 +46,7 @@ import {
     let Links;
 
     { user ? Links = [{ name: 'Home', to: '/' }, { name: "My feed", to: '/feed' }, { name: 'My profile', to: '/user-profile' }] : 
-    Links = [{ name: 'Home', to: '/' }, { name: 'Sign in', to: '/sign-in' }]}
+    Links = [{ name: 'Home', to: '/' }]}
 
     const navigate = useNavigate();
   
@@ -74,11 +74,17 @@ import {
               </HStack>
             </HStack>
             <Flex alignItems={'center'}>
-                {user && <Text
+                {user ? <Text
                   onClick={() => navigate("/user-profile")}
                   display={["none", "block"]}
                   cursor="pointer"
-                ><i className="fa-solid fa-user"></i> {user.username}</Text>}
+                ><i className="fa-solid fa-user"></i> {user.username}</Text> :
+                <Text
+                  onClick={() => navigate("/sign-in")}
+                  display={["none", "block"]}
+                  cursor="pointer"
+                >Sign in</Text>
+                } 
             </Flex>
           </Flex>
   
