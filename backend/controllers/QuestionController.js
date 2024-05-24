@@ -123,15 +123,18 @@ const getFeedQuestions = async function (req, res) {
 
         // Fetch all questions answered by the users followed
         const questions = await Question.find({ recipient: { $in: usersFollowed } }).sort({ answerDate: -1 }).populate('recipient');
+        const answeredQuestions = questions.filter(q => q.answer); 
 
         // Check if there are no questions
-        if (questions.length === 0) {
+        if (answeredQuestions.length === 0 ) {
             questionLogger.info(`Status code: 200, Message: 'Users followed have no answered questions.'`);
             return res.status(200).json({ message: 'Users you are following have not answered any questions yet.', questions: [] });
         }
 
+
+
         questionLogger.info(`Status code: 200, Message: 'Fetched feed questions successfully'`);
-        return res.status(200).json({ message: 'Successfully fetched feed questions', questions: questions });
+        return res.status(200).json({ message: 'Successfully fetched feed questions', questions: answeredQuestions });
     } catch (error) {
         questionLogger.error(`Status code: 500, Message: 'Error fetching feed questions: Internal server error'`);
         res.status(500).json({ message: 'Internal server error' });
