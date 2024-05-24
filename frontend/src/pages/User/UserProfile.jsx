@@ -31,7 +31,7 @@ const UserProfile = () => {
 
     // pagination
     const [ currentPage, setCurrentPage ] = useState(1)
-    const recordsPerPage = 3;
+    const recordsPerPage = 5;
     const lastIndex = currentPage * recordsPerPage;
     const firstIndex = lastIndex - recordsPerPage;
     const records = data.slice( firstIndex, lastIndex );
@@ -79,17 +79,26 @@ const UserProfile = () => {
             let questions;
             switch (selectValue) {
                 case "asked":
-                    questions = data.questionsAsked.filter(question => question.answer);
+                    questions = data.questionsAsked
+                    .filter(question => question.answer)
+                    .sort((a, b) => new Date(b.answerDate) - new Date(a.answerDate));
+                
                     questions.length < 1 ? setErrorMessage("No questions asked.") : setErrorMessage("");
                     setData(questions);
                     break;
                 case "new":
-                    questions = data.questionsRecieved.filter(question => !question.answer);
+                    questions = data.questionsRecieved
+                    .filter(question => !question.answer)
+                    .sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate));
+                    
                     questions.length < 1 ? setErrorMessage("No new questions") : setErrorMessage("");
                     setData(questions);
                     break;
                 case "answered":
-                    questions = data.questionsRecieved.filter(question => question.answer);
+                    questions = data.questionsRecieved
+                    .filter(question => question.answer)
+                    .sort((a, b) => new Date(b.answerDate) - new Date(a.answerDate));
+
                     questions.length < 1 ? setErrorMessage("No questions answered.") : setErrorMessage("");
                     setData(questions);
                     break;

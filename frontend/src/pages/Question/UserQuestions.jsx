@@ -38,7 +38,7 @@ const UserQuestions = () => {
 
     // pagination
     const [ currentPage, setCurrentPage ] = useState(1)
-    const recordsPerPage = 3;
+    const recordsPerPage = 5;
     const lastIndex = currentPage * recordsPerPage;
     const firstIndex = lastIndex - recordsPerPage;
     const records = userQuestions.slice( firstIndex, lastIndex );
@@ -92,7 +92,8 @@ const UserQuestions = () => {
                 setErrorMessage(`${username} hasn't answered any questions yet.`);
             }
 
-            setUserQuestions(data.questions);
+            const questions = data.questions.sort((a, b) => new Date(b.answerDate) - new Date(a.answerDate));
+            setUserQuestions(questions);
         } catch (error) {
             setErrorMessage(error.message);
         }
