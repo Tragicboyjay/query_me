@@ -46,6 +46,7 @@ const SearchModal = () => {
     };
 
     const usernameSearch = (input) => {
+        fetchUsernames();
         if (input === "") {
             setUsernameMatches(null);
         } else {
@@ -54,39 +55,46 @@ const SearchModal = () => {
         }
     };
 
-    const handleUserClick = (username) => { // Modified function
+    const handleUserClick = (username) => {
         setSelectedUsername(username);
-        onClose();
+        setSearchInput("")
+        modalClose();
     };
 
-    useEffect(() => {
+    const modalOpen = () => {
         fetchUsernames();
-    }, []);
+        onOpen();
+    }
+
+    const modalClose = () => {
+        setSearchInput("");
+        onClose();
+
+    }
+
 
     useEffect(() => {
         usernameSearch(searchInput);
-    }, [searchInput]);
 
-    useEffect(() => { // Added useEffect
         if (selectedUsername) {
             navigate(`user/${selectedUsername}`);
             setUsernameMatches(null);
             setSearchInput("");
             setSelectedUsername(null);
         }
-    }, [selectedUsername, navigate]);
+    }, [selectedUsername, navigate, searchInput]);
 
     return (  
         <Box>
             <Button
                 background="teal.200"
-                onClick={onOpen}
+                onClick={modalOpen}
                 size="sm"
             >
                 {/* User search */}
                 <i className="fa-solid fa-magnifying-glass"></i>
             </Button>
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal isOpen={isOpen} onClose={modalClose}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>User Search</ModalHeader>
@@ -100,8 +108,6 @@ const SearchModal = () => {
                             mb="1rem"
                         />
                         <Box
-                            // border={usernameMatches && usernameMatches.length > 0 && "1px"}
-                            // boxShadow={usernameMatches && usernameMatches.length > 0 && "inset 0 0 2px rgba(0, 0, 0, 0.5)"} 
                             borderColor="gray.200"
                             borderRadius="md"
                             maxHeight="400px"
@@ -119,6 +125,7 @@ const SearchModal = () => {
                                     _hover={{ color: "teal.200", shadow: "base" }}
                                     onClick={() => handleUserClick(username)}
                                     cursor="pointer"
+                                    
                                 >
                                     <Center>
                                         <Heading 
@@ -136,7 +143,7 @@ const SearchModal = () => {
                     <ModalFooter>
                         <Button 
                             background="teal.200"
-                            onClick={onClose}
+                            onClick={modalClose}
                         >
                             Close
                         </Button>
