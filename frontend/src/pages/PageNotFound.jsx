@@ -1,20 +1,24 @@
 import { Box, Heading, Image, Button, Center } from "@chakra-ui/react";
 import gif from "../assets/404.gif"
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { Helmet } from "react-helmet";
 
 const PageNotFound = () => {
     const navigate = useNavigate();
-
-    useEffect(() => {
-        document.title = "404 Page Not Found"
-    }, [])
-
     
     return (  
         <Box
             textAlign="center"
         >
+            <Helmet>
+                <title>404 Page Not Found</title>
+                <meta name="description" content="Sorry, the page you are looking for could not be found." />
+                <meta name="keywords" content="404, page not found, error" />
+                <meta property="og:title" content="404 Page Not Found" />
+                <meta property="og:description" content="Sorry, the page you are looking for could not be found." />
+                <meta property="og:type" content="website" />
+            </Helmet>
+
             <Center>
                 <Image
                     src={gif} 

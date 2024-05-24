@@ -23,6 +23,7 @@ import { useAuth } from "../../contexts/authContext";
 import { useNavigate, useParams } from "react-router-dom";
 import followerIcon from "../../assets/followers.png"
 import CharacterInput from "../../components/CharacterInput";
+import { Helmet } from "react-helmet";
 
 const UserQuestions = () => {
     const { user, followUserX, unfollowUserX } = useAuth();
@@ -55,7 +56,6 @@ const UserQuestions = () => {
     
 
     useEffect(() => {
-        document.title = username + " | Query-Me"
 
         setFollowing(isFollowing());
 
@@ -265,6 +265,15 @@ const UserQuestions = () => {
 
     return (
         <Box width="100%" px={"15%"} my={"2rem"}>
+            <Helmet>
+                <title>{username} | Query-Me</title>
+                <meta name="description" content={`Explore questions answered by ${username} on Query-Me and ask your own questions to the community.`} />
+                <meta name="keywords" content={`${username}, user questions, Query-Me, answers, community, ask questions`} />
+                <meta property="og:title" content={`${username} | Query-Me`} />
+                <meta property="og:description" content={`Explore questions answered by ${username} on Query-Me and ask your own questions to the community.`} />
+                <meta property="og:type" content="website" />
+            </Helmet>
+
             <Flex
                 width="100%"
                 align="center"

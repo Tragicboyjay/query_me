@@ -16,15 +16,12 @@ import search from "../assets/search.svg";
 import answer from "../assets/answer.svg";
 
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react"; 
+import { Helmet } from "react-helmet";
 
 
 const Home = () => { 
     const navigate = useNavigate();
 
-    useEffect( () => {
-        document.title = "Home | Query-Me"
-    })
 
     return (
         <Flex
@@ -34,6 +31,15 @@ const Home = () => {
             gap="2rem"
             padding="2rem"
         >
+            <Helmet>
+                <title>Home | Query-Me</title>
+                <meta name="description" content="Query-Me is a question and answer platform where you can ask questions to your friends, followers, or the entire community." />
+                <meta name="keywords" content="Query-Me, question and answer, ask questions, get answers, community platform" />
+                <meta property="og:title" content="Home | Query-Me" />
+                <meta property="og:description" content="Query-Me is a question and answer platform where you can ask questions to your friends, followers, or the entire community." />
+                <meta property="og:type" content="website" />
+            </Helmet>
+
             {/* Main Banner Section */}
             <Box
                 textAlign="center"

@@ -2,6 +2,7 @@ import { FormControl, Heading, FormLabel, Input, Center, Button, Text, Link as C
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/authContext";
+import { Helmet } from 'react-helmet';
 
 const SignIn = () => {
     const [emailInput, setEmailInput] = useState("");
@@ -12,7 +13,6 @@ const SignIn = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        document.title = "Sign In | Query-Me"
         if (user) {
             navigate("/user-profile");
         }
@@ -70,6 +70,16 @@ const SignIn = () => {
             width="70%"
             maxWidth="400px"
         >
+            <Helmet>
+                <title>Sign In | Query-Me</title>
+                <meta name="description" content="Sign in to your Query-Me account to access your personalized content and interact with the community." />
+                <meta name="keywords" content="sign in, login, Query-Me, user account, community" />
+                <meta property="og:title" content="Sign In | Query-Me" />
+                <meta property="og:description" content="Sign in to your Query-Me account to access your personalized content and interact with the community." />
+                <meta property="og:type" content="website" />
+                {/* <meta property="og:url" content="http://yourwebsite.com/sign-in" />
+                <meta property="og:image" content="http://yourwebsite.com/path-to-your-image.jpg" /> */}
+            </Helmet>
         
             <Heading textAlign={"center"} mb="1rem">Sign In</Heading>
             <Text textAlign="center" color="red">{errorMessage}</Text>

@@ -10,7 +10,8 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/authContext"
-import { useNavigate } from "react-router-dom" ;
+import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const MyFeed = () => {
     const { user } = useAuth();
@@ -30,7 +31,6 @@ const MyFeed = () => {
     const navigate = useNavigate()
 
     useEffect( () => {
-        document.title = "My Feed | Query-Me"
         getFeedQuestions()
     }, [])
 
@@ -121,6 +121,15 @@ const MyFeed = () => {
             <Box
                 minH={["350px", "350px", "450px", "850px"]}
             >
+                <Helmet>
+                    <title>My Feed | Query-Me</title>
+                    <meta name="description" content="Explore questions answered by users you follow on Query-Me and stay up-to-date with the latest activity." />
+                    <meta name="keywords" content="my feed, Query-Me, follow, answers, community" />
+                    <meta property="og:title" content="My Feed | Query-Me" />
+                    <meta property="og:description" content="Explore questions answered by users you follow on Query-Me and stay up-to-date with the latest activity." />
+                    <meta property="og:type" content="website" />
+                </Helmet>
+
                 {!feedQuestionError && feedQuestions.data.length < 1 && <Heading textAlign="center">{feedQuestions.message}</Heading>}
                 {!feedQuestionError && feedQuestions.data.length > 0 && records.map(question => (
                     <Box 

@@ -22,7 +22,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import FollowingModal from "../../components/FollowingModal";
 import CharacterInput from "../../components/CharacterInput";
-
+import { Helmet } from "react-helmet";
 
 const UserProfile = () => {
     const [selectValue, setSelectValue] = useState("new");
@@ -47,10 +47,6 @@ const UserProfile = () => {
     const toast = useToast();
 
     const [ tooManyCharacters, setTooManyCharacters ] = useState(false)
-
-    useEffect(() => {
-        document.title = "My Profile | Query-Me"
-    },[])
 
 
     const handleLogOut = () => {
@@ -194,6 +190,15 @@ const UserProfile = () => {
 
     return (
         <Box w={"100%"} px={"15%"} my={"1rem"}>
+            <Helmet>
+                <title>My Profile | Query-Me</title>
+                <meta name="description" content="View and manage your profile on Query-Me, including your questions and settings." />
+                <meta name="keywords" content="my profile, Query-Me, questions, settings, log out" />
+                <meta property="og:title" content="My Profile | Query-Me" />
+                <meta property="og:description" content="View and manage your profile on Query-Me, including your questions and settings." />
+                <meta property="og:type" content="website" />
+            </Helmet>
+
             <Flex  
                 direction={["column", "row", "row", "row"]} 
                 width={"100%"}

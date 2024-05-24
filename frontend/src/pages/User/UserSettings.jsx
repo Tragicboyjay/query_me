@@ -26,8 +26,8 @@ import {
 
 import { useAuth } from "../../contexts/authContext"
 import { useNavigate } from "react-router-dom"
-import { useState, useEffect } from "react";
-
+import { useState } from "react";
+import { Helmet } from "react-helmet"
 
 const UserSettings = () => {
     const { user, logoutUser, updateUsername, updateEmail } = useAuth();
@@ -46,10 +46,6 @@ const UserSettings = () => {
 
     const { isOpen: deleteIsOpen, onOpen: deleteOnOpen, onClose: deleteOnClose } = useDisclosure();
     const { isOpen: editIsOpen, onOpen: editOnOpen, onClose: editOnClose } = useDisclosure();
-
-    useEffect(() => {
-        document.title = "My Settings | Query-Me"
-    }, [])
 
 
     const deleteUser = async e => {
@@ -166,6 +162,15 @@ const UserSettings = () => {
             flexDir="column"
             alignItems="center"
         >
+            <Helmet>
+                <title>My Settings | Query-Me</title>
+                <meta name="description" content="Manage your settings on Query-Me, including username, email, and password." />
+                <meta name="keywords" content="user settings, Query-Me, manage settings, change username, change email, change password" />
+                <meta property="og:title" content="User Settings | Query-Me" />
+                <meta property="og:description" content="Manage your settings on Query-Me, including username, email, and password." />
+                <meta property="og:type" content="website" />
+            </Helmet>
+
             <Heading
                 textAlign="center" 
                 mb="2rem"
