@@ -89,10 +89,10 @@ const MyFeed = () => {
     }
 
     const nextPage = () => {
-        if (currentPage !== lastIndex ) {
+        if (currentPage !== npages ) {
             setCurrentPage(currentPage + 1)
         }
-    } 
+    }
 
 
     return (  

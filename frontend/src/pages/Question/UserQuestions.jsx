@@ -148,10 +148,10 @@ const UserQuestions = () => {
     }
 
     const nextPage = () => {
-        if (currentPage !== lastIndex ) {
+        if (currentPage !== npages ) {
             setCurrentPage(currentPage + 1)
         }
-    } 
+    }
 
     const isFollowing = () => {
         return user && user.following && user.following.includes(username);
