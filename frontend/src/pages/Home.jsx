@@ -76,35 +76,30 @@ const Home = () => {
                     <List spacing={4} >
                         <ListItem>
                             <Flex alignItems="center">
-                                {/* <Image src="" alt="Feature 1" boxSize="50px" mr="1rem" /> */}
                                 <i style={{fontSize: "50px", marginRight: "1rem"}} className="fa-solid fa-magnifying-glass"></i>
                                 <Heading size="md">Search for users and ask them questions anonymously.</Heading>
                             </Flex>
                         </ListItem>
                         <ListItem>
                             <Flex alignItems="center">
-                                {/* <Image src="path-to-feature-image2.jpg" alt="Feature 2" boxSize="50px" mr="1rem" /> */}
                                 <i style={{fontSize: "50px", marginRight: "1rem"}} className="fa-solid fa-inbox"></i>
                                 <Heading size="md">Receive and answer questions from friends and followers.</Heading>
                             </Flex>
                         </ListItem>
                         <ListItem>
                             <Flex alignItems="center">
-                                {/* <Image src="path-to-feature-image3.jpg" alt="Feature 3" boxSize="50px" mr="1rem" /> */}
                                 <i style={{fontSize: "50px", marginRight: "1rem"}} className="fa-solid fa-plus"></i>
                                 <Heading size="md">Follow interesting profiles and stay updated with their answers.</Heading>
                             </Flex>
                         </ListItem>
                         <ListItem>
                             <Flex alignItems="center">
-                                {/* <Image src="path-to-feature-image4.jpg" alt="Feature 4" boxSize="50px" mr="1rem" /> */}
                                 <i style={{fontSize: "50px", marginRight: "1rem"}} className="fa-solid fa-user"></i>
                                 <Heading size="md">Customize your profile with a bio, photo, and more.</Heading>
                             </Flex>
                         </ListItem>
                         <ListItem>
                             <Flex alignItems="center">
-                                {/* <Image src="path-to-feature-image5.jpg" alt="Feature 5" boxSize="50px" mr="1rem" /> */}
                                 <i style={{fontSize: "50px", marginRight: "1rem"}} className="fa-solid fa-envelope"></i>
                                 <Heading size="md">Get notified when someone asks or answers a question.</Heading>
                             </Flex>
