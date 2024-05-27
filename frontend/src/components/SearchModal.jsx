@@ -29,7 +29,7 @@ const SearchModal = () => {
     const fetchUsernames = async () => {
         try {
             setSearchError("");
-            const response = await fetch("http://localhost:8001/user/all");
+            const response = await fetch("https://query-me-api.onrender.com/user/all");
 
             if (!response.ok) {
                 const data = await response.json();

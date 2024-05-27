@@ -45,7 +45,7 @@ const FollowingModal = () => {
 
     const getFollowerMetrics = async () => {
         try {
-            const response = await fetch("http://localhost:8001/user/follow-info", {
+            const response = await fetch("https://query-me-api.onrender.com/user/follow-info", {
                 method: "GET",
                 headers: {
                     'content-type': 'application/json',
@@ -76,7 +76,7 @@ const FollowingModal = () => {
         try {
             console.log(username)
 
-            const response = await fetch(`http://localhost:8001/user/unfollow/${username}`, {
+            const response = await fetch(`https://query-me-api.onrender.com/user/unfollow/${username}`, {
                 method: "PATCH",
                 headers: {
                     'content-type': 'application/json',

@@ -36,7 +36,7 @@ const MyFeed = () => {
 
     const getFeedQuestions = async () => {
         try {
-            const response = await fetch("http://localhost:8001/question/feed-questions", {
+            const response = await fetch("https://query-me-api.onrender.com/question/feed-questions", {
                 method: "GET",
                 headers: {
                     'content-type': 'application/json',

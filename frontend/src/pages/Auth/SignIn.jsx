@@ -33,7 +33,7 @@ const SignIn = () => {
             
             
     
-            const response = await fetch("http://localhost:8001/auth/authenticate", {
+            const response = await fetch("https://query-me-api.onrender.com/auth/authenticate", {
                 method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
