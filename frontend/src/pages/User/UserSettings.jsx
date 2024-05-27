@@ -56,7 +56,7 @@ const UserSettings = () => {
 
             const password = { password: deletePasswordInput }
 
-            const response = await fetch("https://query-me-api.onrender.com/user/", {
+            const response = await fetch("https://query-me-api-1.onrender.com/user/", {
                 method: "DELETE",
                 headers: {
                     'content-type': 'application/json',
@@ -114,7 +114,7 @@ const UserSettings = () => {
     
             const body = { password: editPasswordInput, newValue: newEditInput };
 
-            const response = await fetch(`https://query-me-api.onrender.com/user/${editField.toLowerCase()}`, {
+            const response = await fetch(`https://query-me-api-1.onrender.com/user/${editField.toLowerCase()}`, {
                 method: "PATCH",
                 headers: {
                     'content-type': 'application/json',

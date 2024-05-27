@@ -78,7 +78,7 @@ const UserQuestions = () => {
 
     const fetchQuestions = async () => {
         try {
-            const response = await fetch(`https://query-me-api.onrender.com/question/search/${username}`);
+            const response = await fetch(`https://query-me-api-1.onrender.com/question/search/${username}`);
 
             if (!response.ok) {
                 const data = await response.json();
@@ -108,7 +108,7 @@ const UserQuestions = () => {
         try {
             const question = { questionBody: questionInput };
 
-            const response = await fetch(`https://query-me-api.onrender.com/question/ask/${username}`, {
+            const response = await fetch(`https://query-me-api-1.onrender.com/question/ask/${username}`, {
                 method: "POST",
                 headers: {
                     'content-type': 'application/json',
@@ -167,7 +167,7 @@ const UserQuestions = () => {
 
     const followUser = async () => {
         try {
-            const response = await fetch(`https://query-me-api.onrender.com/user/follow/${username}`, {
+            const response = await fetch(`https://query-me-api-1.onrender.com/user/follow/${username}`, {
                 method: "PATCH",
                 headers: {
                     'content-type': 'application/json',
@@ -204,7 +204,7 @@ const UserQuestions = () => {
 
     const unFollowUser = async () => {
         try {
-            const response = await fetch(`https://query-me-api.onrender.com/user/unfollow/${username}`, {
+            const response = await fetch(`https://query-me-api-1.onrender.com/user/unfollow/${username}`, {
                 method: "PATCH",
                 headers: {
                     'content-type': 'application/json',
@@ -241,7 +241,7 @@ const UserQuestions = () => {
 
     const getFollowCount = async () => {
         try {
-            const response = await fetch(`https://query-me-api.onrender.com/user/follow-count/${username}`)
+            const response = await fetch(`https://query-me-api-1.onrender.com/user/follow-count/${username}`)
 
             if(!response.ok) {
                 const data = await response.json();
