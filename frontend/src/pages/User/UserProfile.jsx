@@ -62,7 +62,7 @@ const UserProfile = () => {
 
     const fetchQuestions = async () => {
         try {
-            const response = await fetch("https://query-me-api-1.onrender.com/question/own", {
+            const response = await fetch("http://localhost:8001/question/own", {
                 method: "GET",
                 headers: {
                     'content-type': 'application/json',
@@ -135,7 +135,7 @@ const UserProfile = () => {
             setQuestionErrorMessage("");
             const answer = { questionAnswer };
 
-            const response = await fetch(`https://query-me-api-1.onrender.com/question/answer/${questionId}`, {
+            const response = await fetch(`http://localhost:8001/question/answer/${questionId}`, {
                 method: "POST",
                 headers: {
                     'content-type': 'application/json',

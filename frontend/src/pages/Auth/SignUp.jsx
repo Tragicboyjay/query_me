@@ -52,7 +52,7 @@ const SignUp = () => {
             };
 
         
-            const response = await fetch("https://query-me-api-1.onrender.com/auth/create-user", {
+            const response = await fetch("http://localhost:8001/auth/create-user", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
