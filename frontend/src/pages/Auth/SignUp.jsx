@@ -42,7 +42,7 @@ const SignUp = () => {
             }
 
             if (!passwordRegex.test(passwordInput)) {
-                throw new Error("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+                throw new Error("Password must be at least 8 characters long and contain at least one uppercase, lowercase letter, one number, and one special character (@$!%*?&#).");
             }
 
             const newUser = {
