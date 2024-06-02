@@ -48,7 +48,9 @@ const SignUp = () => {
             const newUser = {
                 email: emailInput,
                 username: usernameInput,
-                password: passwordInput
+                password: passwordInput,
+                followers: [],  
+                following: []
             };
 
         

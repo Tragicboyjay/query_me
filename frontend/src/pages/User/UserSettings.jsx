@@ -56,7 +56,7 @@ const UserSettings = () => {
 
             const password = { password: deletePasswordInput }
 
-            const response = await fetch("http://localhost:8001/user/", {
+            const response = await fetch("https://query-me-api.onrender.com/user/", {
                 method: "DELETE",
                 headers: {
                     'content-type': 'application/json',
@@ -70,7 +70,7 @@ const UserSettings = () => {
                 throw new Error(data.message)
             }
 
-            deletePasswordInput("");
+            setDeletePasswordInput("");
 
             logoutUser();
             navigate("/");
@@ -83,10 +83,16 @@ const UserSettings = () => {
     const handleEditModal = field => {
         setEditError("");
         setEditPasswordInput("")
-        setNewEditInput("")
+
+        editField === "Email" ? setNewEditInput(user.email) :
+        editField === "Username" ? setNewEditInput(user.username) :
+        setNewEditInput("");
+
         setEditField(field);
         editOnOpen();
     }
+
+
 
     const editUser = async e => {
         try {
@@ -95,7 +101,7 @@ const UserSettings = () => {
 
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             const usernameRegex = /^[a-zA-Z0-9]{1,12}$/;
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
 
             if ( editField === "Email" && !emailRegex.test(newEditInput) ) {
                 throw new Error("Please enter a valid email address.");
@@ -108,13 +114,13 @@ const UserSettings = () => {
 
 
             if ( editField === "Password" && !passwordRegex.test(newEditInput)) {
-                throw new Error("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+                throw new Error("Password must be at least 8 characters long and contain at least one uppercase, lowercase letter, one number, and one special character (@$!%*?&#).")
             }
 
     
             const body = { password: editPasswordInput, newValue: newEditInput };
 
-            const response = await fetch(`http://localhost:8001/user/${editField.toLowerCase()}`, {
+            const response = await fetch(`https://query-me-api.onrender.com/user/${editField.toLowerCase()}`, {
                 method: "PATCH",
                 headers: {
                     'content-type': 'application/json',

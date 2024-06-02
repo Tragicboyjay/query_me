@@ -15,7 +15,8 @@ import {
     ModalCloseButton,
     Textarea,
     useToast,
-    Tooltip
+    Tooltip,
+    useDisclosure
 } from "@chakra-ui/react";
 import { useAuth } from '../../contexts/authContext';
 import { useNavigate, Link } from "react-router-dom";
@@ -170,6 +171,55 @@ const UserProfile = () => {
         }
     };
 
+    const [ deleteId, setDeleteId ] = useState(null);
+
+    const deleteQuestion = async () => {
+        try {
+            const id = deleteId;
+            const response = await fetch(`http://localhost:8001/question/${id}`, {
+                method: "DELETE",
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                }
+            })
+
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message);
+            }
+
+            const data = await response.json();
+            
+            toast({
+                title: data.message,
+                status: 'success',
+                duration: 9000,
+                position: "top",
+                isClosable: true,
+            });
+
+            deleteOnClose();
+            fetchQuestions();
+            
+        } catch (error) {
+            toast({
+                title: data.message,
+                status: 'error',
+                duration: 9000,
+                position: "top",
+                isClosable: true,
+            });
+
+        }
+    }
+
+    const { isOpen: deleteIsOpen, onOpen: deleteOnOpen, onClose: deleteOnClose } = useDisclosure();
+
+    const handleDeleteModal = id => {
+        setDeleteId(id)
+        deleteOnOpen()
+    }
 
     // pagination function
     const previousPage = () => {
@@ -266,8 +316,42 @@ const UserProfile = () => {
                         <Text>Asked: {formatDate(question.creationDate)} <br /> Answered: {formatDate(question.answerDate)}</Text>}
 
                         {selectValue === "new" && 
-                            <Button onClick={() => toggleModal(question._id)} mt="1rem" background="teal.200">Answer Question</Button>
+                            <Flex
+                                mt="1rem"
+                                gap="1rem"
+                                alignItems="center"
+                            >
+                                <Button onClick={() => toggleModal(question._id)}  background="teal.200">Answer Question</Button>
+                                <Tooltip label="Delete question">
+                                    <Button
+                                        onClick={() => handleDeleteModal(question._id)}
+                                        background="red.400"
+                                    ><i className="fa-solid fa-trash"></i></Button>
+                                </Tooltip>
+                            </Flex>
+
                         }
+
+                        <Modal isOpen={deleteIsOpen} onClose={deleteOnClose}>
+                            <ModalOverlay />
+                            <ModalContent>
+                            <ModalHeader>Comfirmation</ModalHeader>
+                            <ModalCloseButton />
+                            <ModalBody>
+                                <Heading textAlign="center" size="md">Are you sure you want to delete this question?</Heading>
+                            </ModalBody>
+
+                            <ModalFooter>
+                                <Button background="lightgray" mr={3} onClick={deleteOnClose}>
+                                No
+                                </Button>
+                                <Button
+                                    onClick={deleteQuestion}
+                                    background="red.400"
+                                >Yes</Button>
+                            </ModalFooter>
+                            </ModalContent>
+                        </Modal>
 
                         <Modal isOpen={questionModals[question._id]} onClose={() => toggleModal(question._id)}>
                             <ModalOverlay />

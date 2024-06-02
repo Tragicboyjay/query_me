@@ -141,6 +141,27 @@ const getFeedQuestions = async function (req, res) {
     }
 };
 
+const deleteQuestion = async (req,res) => {
+    try {
+        const user = req.user;
+
+        const questionId = req.params.id;
+
+        const question = await Question.findById(questionId);
+
+        if (question.recipient !== user.username) {
+            questionLogger.error("Status code: 403, Message: 'Error deleting questions: User not authorized'");
+            return res.status(403).send({ message: 'You are not authorized to delete this question' });
+        }
+
+        const result = await Question.findByIdAndDelete(questionId);
+        return res.status(200).send({ message: 'Question deleted successfully', deletedQuestion: result });
+        
+    } catch (error) {
+        questionLogger.error(`Status code: 500, Message: 'Error deleting question: Internal server error'`);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
 
 
 module.exports = {
@@ -148,5 +169,6 @@ module.exports = {
     answerQuestion,
     getQuestionsByUser,
     getOwnQuestions,
-    getFeedQuestions
+    getFeedQuestions,
+    deleteQuestion
 };
