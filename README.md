@@ -58,9 +58,6 @@ Visit the live site: [Query-Me](https://query-me.vercel.app/)
 
 ## Contributing
 
-### Code of Conduct
-[Link to Code of Conduct]
-
 ### How to Report Issues
 Please use the [GitHub issues page](https://github.com/tragicboyjay/query-me/issues) to report any bugs or feature requests.
 
